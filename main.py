@@ -61,7 +61,8 @@ def main(p_args):
     # Note
     new_excel_list = []
     for tmp_dict in old_excel_list:
-        if contains(p_new_excel_list=new_excel_list, p_old_dict=tmp_dict) is False:
+        rst = contains(p_new_excel_list=new_excel_list, p_old_dict=tmp_dict)
+        if rst is False:
             new_excel_list.append(tmp_dict)
     print('\n去重后的新数据条数final new_excel_list length=====>>%d' % (len(new_excel_list)))
 
