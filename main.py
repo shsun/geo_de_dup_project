@@ -56,7 +56,7 @@ def main(p_args):
 
     # Note 最重要的一步 3. 去重, 将去重后的数据存入new_excel_list中
     # Note 对老数据循环, 挨个去和新数据内的所有数据逐个对比, 如果在new_list内找到了, 则认为是同一地址, 否则认为是不同地址, 不同地址则添加到new_excel_list内
-    # Note
+    # Note 所以这里是两层循环
     # Note
     new_excel_list = []
     for tmp_dict in old_excel_list:
