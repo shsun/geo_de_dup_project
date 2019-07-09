@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-import sys, hashlib, os, platform, re, tempfile, time, os, os.path, string, subprocess, datetime, time, openpyxl, xlrd
-from openpyxl.utils import get_column_letter, column_index_from_string
-import xlrd, xlwt
-import difflib
+import sys, platform, re, os, os.path, string, subprocess, datetime, time, openpyxl, xlrd, xlwt
 
 from Address import Address
 from GEODistanceStrategy import GEODistanceStrategy
@@ -26,10 +23,10 @@ def read_excel(file):
         print(err)
 
 
-def excel_to_dict(p_read_excel_file_path=None, p_sheet_name=None, p_excel_title_list=None):
+def excel_to_list(p_read_excel_file_path=None, p_sheet_name=None, p_excel_title_list=None):
     """
     :rtype : object
-    :return dict
+    :return list
     """
     my_list = []
     data = read_excel(p_read_excel_file_path)
@@ -96,10 +93,6 @@ def contains(p_list=None, p_dict=None):
     """
     rst = False
     for obj in p_list:
-
-        # Note 根据经纬度1%来判断
-        # rst = compare(p_address_dict_A=obj, p_address_dict_B=p_dict)
-
         # Note 根据距离来判断(200米)
         distance = GEODistanceStrategy().cal_physical_distance(p_address_dict_A=obj, p_address_dict_B=p_dict)
 
@@ -120,7 +113,8 @@ def contains(p_list=None, p_dict=None):
 def main(p_args):
     excel_title = ['序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度', '标准地址', '标准地址是否新地址']
 
-    old_excel_list = excel_to_dict(p_read_excel_file_path='./receiving_address_input_1.xlsx', p_sheet_name='Sheet1', p_excel_title_list=excel_title)
+    old_excel_list = excel_to_list(p_read_excel_file_path='./receiving_address_input_1.xlsx', p_sheet_name='Sheet1',
+                                   p_excel_title_list=excel_title)
     new_excel_list = []
 
     print('\n老数据总条数old_excel_list length=====>>%d' % (len(old_excel_list)))
@@ -155,9 +149,10 @@ def main(p_args):
 
     #
     new_file = './receiving_address_output_1.xls'
-    if (os.path.exists(new_file)):
+    if os.path.exists(new_file):
         os.remove(new_file)
-    success = dict_to_excel(p_write_excel_file_path=new_file, p_sheet_name='Sheet1', p_dict_content=stus, p_excel_title_list=excel_title)
+    success = dict_to_excel(p_write_excel_file_path=new_file, p_sheet_name='Sheet1', p_dict_content=stus,
+                            p_excel_title_list=excel_title)
 
     print('DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE !!!!!!!!!!!!!!!!!!!!!!!!!!!')
     return 0
