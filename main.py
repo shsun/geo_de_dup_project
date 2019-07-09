@@ -5,63 +5,12 @@ import sys, os, os.path, xlrd, xlwt
 from app.GEODistanceStrategy import GEODistanceStrategy
 from app.StringDiffStrategy import StringDiffStrategy
 from app.LALPctStrategy import LALPctStrategy
-
-
-def read_excel(file):
-    """
-    读入excel文件
-    :rtype : object
-    :param file:
-    :return: 数据对象
-    """
-    try:
-        data = xlrd.open_workbook(file)
-        return data
-    except Exception as err:
-        print(err)
-
-
-def excel_to_list(p_read_excel_file_path=None, p_sheet_name=None, p_excel_title_list=None):
-    """
-    :rtype : object
-    :return list
-    """
-    my_list = []
-    data = read_excel(p_read_excel_file_path)
-    table = data.sheet_by_name(p_sheet_name)
-    for i in range(1, table.nrows):
-        row_content = table.row_values(i, 0, table.ncols)
-        dict_column = dict(zip(p_excel_title_list, row_content))
-        # dict_column['经度'] = float(dict_column['经度'])
-        # dict_column['纬度'] = float(dict_column['纬度'])
-        # for (k, v) in dict_column.items():
-        #     print(k)
-        my_list.append(dict_column)
-    return my_list
-
-
-def dict_to_excel(p_write_excel_file_path=None, p_sheet_name=None, p_dict_content=None, p_excel_title_list=None):
-    """
-    将字典写入excel中
-    :type dict_content: object dict
-    excel_title 列标题
-    """
-    book = xlwt.Workbook()
-    sheet = book.add_sheet(p_sheet_name)
-    row_index = 0
-    for stu in p_dict_content:
-        col_index = 0
-        for value in stu:
-            sheet.write(row_index, col_index, value)
-            col_index += 1
-        row_index += 1
-    book.save(p_write_excel_file_path)
-    return True
+from app.XUtils import XUtils
 
 
 def contains(p_list=None, p_dict=None):
     """
-
+    判断
     :param p_list:
     :param p_dict:
     :return:
@@ -91,9 +40,9 @@ def contains(p_list=None, p_dict=None):
 def main(p_args):
     excel_title = ['序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度', '标准地址', '标准地址是否新地址']
 
-    old_excel_list = excel_to_list(p_read_excel_file_path='./resources/receiving_address_input_1.xlsx',
-                                   p_sheet_name='Sheet1',
-                                   p_excel_title_list=excel_title)
+    old_excel_list = XUtils.excel_to_list(p_read_excel_file_path='./resources/receiving_address_input_1.xlsx',
+                                          p_sheet_name='Sheet1',
+                                          p_excel_title_list=excel_title)
     new_excel_list = []
 
     print('\n老数据总条数old_excel_list length=====>>%d' % (len(old_excel_list)))
@@ -130,8 +79,8 @@ def main(p_args):
     new_file = './resources/receiving_address_output_1.xls'
     if os.path.exists(new_file):
         os.remove(new_file)
-    success = dict_to_excel(p_write_excel_file_path=new_file, p_sheet_name='Sheet1', p_dict_content=stus,
-                            p_excel_title_list=excel_title)
+    success = XUtils.dict_to_excel(p_write_excel_file_path=new_file, p_sheet_name='Sheet1', p_dict_content=stus,
+                                   p_excel_title_list=excel_title)
 
     print('DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE !!!!!!!!!!!!!!!!!!!!!!!!!!!')
     return 0
