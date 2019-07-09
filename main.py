@@ -18,19 +18,15 @@ def contains(p_new_excel_list=None, p_old_dict=None):
     rst = False
     for tmp_new_dict in p_new_excel_list:
 
-        rst = LALPctStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
+        # NOTE 通过对经纬度的比较，相差百分之一或更小以内的视为同一地址，否则视为两个地址
+        #rst = LALPctStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
 
         # Note 根据距离来判断(200米)
-        rst = GEODistanceStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
+        #rst = GEODistanceStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
 
         # Note 计算字符匹配度
         # 详细地址（拼接省市区）匹配度; 详细地址(PROD地址) 匹配度
         rst = StringDiffStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
-
-        # Note 此处代码逻辑很重要
-        # if distance <= 200:
-        #     # if distance <= 100 and r1 >= 0.8 and r2 >= 0.8:
-        #     rst = True
 
         if rst is True:
             break
@@ -58,7 +54,7 @@ def main(p_args):
     old_excel_list = tmp_old_excel_list
     print('\n经纬度数据有问题的数据条数  invalid data num======>>%d\n' % (err_num))
 
-    # Note 3. 去重, 将去重后的数据存入new_excel_list中
+    # Note 最重要的一步 3. 去重, 将去重后的数据存入new_excel_list中
     new_excel_list = []
     for tmp_dict in old_excel_list:
         if contains(p_new_excel_list=new_excel_list, p_old_dict=tmp_dict) is False:
