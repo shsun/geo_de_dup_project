@@ -59,29 +59,6 @@ def dict_to_excel(p_write_excel_file_path=None, p_sheet_name=None, p_dict_conten
     return True
 
 
-def compare(p_address_dict_A=None, p_address_dict_B=None):
-    """
-    我第一个想法是简单的，首先现有地址几乎都有经纬度，我想通过对经纬度的比较，相差百分之一或更小以内的视为同一地址，否则视为两个地址，将地址重复的去掉。
-    生成出地址库。当新地址收录时，通过正向地址编码到高德或百度得到经纬度再与已有经纬度进行匹配比较
-    :param p_address_dict_A:
-    :param p_address_dict_B:
-    :return:
-    """
-    try:
-        delta_longitude = abs(p_address_dict_A['经度'] - p_address_dict_B['经度'])
-        delta_latitude = abs(p_address_dict_A['纬度'] - p_address_dict_B['纬度'])
-
-        pct_longitude = delta_longitude / p_address_dict_A['经度']
-        pct_latitude = delta_latitude / p_address_dict_A['纬度']
-
-        rst = pct_longitude <= 0.01 and pct_latitude <= 0.01
-    except Exception as e:
-        pct_longitude = 1
-        pct_latitude = 1
-        rst = False
-    return rst
-
-
 def contains(p_list=None, p_dict=None):
     """
 
@@ -114,7 +91,8 @@ def contains(p_list=None, p_dict=None):
 def main(p_args):
     excel_title = ['序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度', '标准地址', '标准地址是否新地址']
 
-    old_excel_list = excel_to_list(p_read_excel_file_path='./resources/receiving_address_input_1.xlsx', p_sheet_name='Sheet1',
+    old_excel_list = excel_to_list(p_read_excel_file_path='./resources/receiving_address_input_1.xlsx',
+                                   p_sheet_name='Sheet1',
                                    p_excel_title_list=excel_title)
     new_excel_list = []
 
