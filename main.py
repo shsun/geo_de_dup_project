@@ -114,7 +114,7 @@ def contains(p_list=None, p_dict=None):
 def main(p_args):
     excel_title = ['序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度', '标准地址', '标准地址是否新地址']
 
-    old_excel_list = excel_to_list(p_read_excel_file_path='./receiving_address_input_1.xlsx', p_sheet_name='Sheet1',
+    old_excel_list = excel_to_list(p_read_excel_file_path='./resources/receiving_address_input_1.xlsx', p_sheet_name='Sheet1',
                                    p_excel_title_list=excel_title)
     new_excel_list = []
 
@@ -149,7 +149,7 @@ def main(p_args):
         stus.append(arr)
 
     #
-    new_file = './receiving_address_output_1.xls'
+    new_file = './resources/receiving_address_output_1.xls'
     if os.path.exists(new_file):
         os.remove(new_file)
     success = dict_to_excel(p_write_excel_file_path=new_file, p_sheet_name='Sheet1', p_dict_content=stus,
