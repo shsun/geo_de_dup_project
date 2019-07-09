@@ -19,10 +19,10 @@ def contains(p_new_excel_list=None, p_old_dict=None):
     for tmp_new_dict in p_new_excel_list:
 
         # NOTE 通过对经纬度的比较，相差百分之一或更小以内的视为同一地址，否则视为两个地址
-        #rst = LALPctStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
+        # rst = LALPctStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
 
         # Note 根据距离来判断(200米)
-        #rst = GEODistanceStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
+        # rst = GEODistanceStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
 
         # Note 计算字符匹配度
         # 详细地址（拼接省市区）匹配度; 详细地址(PROD地址) 匹配度
@@ -85,4 +85,5 @@ def main(p_args):
 
 
 if __name__ == '__main__':
+    # NOTE 程序入口
     sys.exit(main(sys.argv))
