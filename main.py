@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-import sys, platform, re, os, os.path, string, subprocess, datetime, time, openpyxl, xlrd, xlwt
+import sys, os, os.path, xlrd, xlwt
 
-from Address import Address
-from GEODistanceStrategy import GEODistanceStrategy
-from StringDiffStrategy import StringDiffStrategy
-
-G_DEBUG_INFO = {'err_num': 0}
+from app.GEODistanceStrategy import GEODistanceStrategy
+from app.StringDiffStrategy import StringDiffStrategy
+from app.LALPctStrategy import LALPctStrategy
 
 
 def read_excel(file):
@@ -93,17 +91,20 @@ def contains(p_list=None, p_dict=None):
     """
     rst = False
     for obj in p_list:
+
+        rst = LALPctStrategy().compare(p_address_dict_a=obj, p_address_dict_b=p_dict)
+
         # Note 根据距离来判断(200米)
-        distance = GEODistanceStrategy().cal_physical_distance(p_address_dict_A=obj, p_address_dict_B=p_dict)
+        rst = GEODistanceStrategy().compare(p_address_dict_a=obj, p_address_dict_b=p_dict)
 
         # Note 计算字符匹配度
         # 详细地址（拼接省市区）匹配度; 详细地址(PROD地址) 匹配度
-        # r1, r2 = StringDiffStrategy().cal_diff(p_address_dict_A=obj, p_address_dict_B=p_dict)
+        rst = StringDiffStrategy().compare(p_address_dict_a=obj, p_address_dict_b=p_dict)
 
         # Note 此处代码逻辑很重要
-        if distance <= 200:
-            # if distance <= 100 and r1 >= 0.8 and r2 >= 0.8:
-            rst = True
+        # if distance <= 200:
+        #     # if distance <= 100 and r1 >= 0.8 and r2 >= 0.8:
+        #     rst = True
 
         if rst is True:
             break
@@ -132,7 +133,7 @@ def main(p_args):
     old_excel_list = tmp_old_excel_list
     print('\n经纬度数据有问题的数据条数  invalid data num======>>%d\n' % (err_num))
 
-    #
+    # Note
     for tmp in old_excel_list:
         if contains(p_list=new_excel_list, p_dict=tmp) is False:
             new_excel_list.append(tmp)
