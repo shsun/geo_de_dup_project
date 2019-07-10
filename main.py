@@ -126,14 +126,60 @@ def main(p_args):
     # Note
     # Note 然后在生成表三，从表2中每一个重复标号的，选取详细地址最长字符的作为表3的地址
     new_excel_list_filtered = []
+    new_excel_dict_filtered = {}
     # Note 注意， 这个value是一个list
     for (key, value) in new_excel_dict_grouped.items():
         rst = fetch_max_length_item(p_excel_sub_list=value)
         new_excel_list_filtered.append(rst)
+        new_excel_dict_filtered[rst['group_id']] = rst
+
     print('\n去重后的新数据条数 new_excel_list_filtered length=====>>%d\n' % (len(new_excel_list_filtered)))
 
     # 6. 对去重后的数据进行处理并写入excel
     process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_filtered, p_new_file='./resources/receiving_address_filtered_1.xls')
+
+    # 7. 读取增量excel(实际excel中就一条) 至 old_excel_list 中
+    excel_title.remove('group_id')
+    old_excel_list = XUtils.excel_to_list(p_read_excel_file_path='./resources/receiving_address_increment_1.xlsx',
+                                          p_sheet_name='Sheet1',
+                                          p_excel_title_list=excel_title)
+    should_create_new_group_4_increment = False
+    excel_title.insert(0, 'group_id')
+    for tmp_dict in old_excel_list:
+        rst, brother_dict = contains(p_new_excel_list=new_excel_list_grouped, p_old_dict=tmp_dict)
+        if rst is False:
+            group_id += 1
+            # 建立小组
+            new_excel_dict_grouped[str(group_id)] = []
+            # Note 加一列数据group_id
+            tmp_dict['group_id'] = group_id
+            #
+            new_excel_list_grouped.append(tmp_dict)
+            # Note 分组, 同一小组的记录具有相同group_id
+            new_excel_dict_grouped[str(tmp_dict['group_id'])].append(tmp_dict)
+
+            new_excel_list_filtered.append(tmp_dict)
+
+            should_create_new_group_4_increment = True
+        else:
+            # 8.
+            print('\n增量地址信息如下=====>>:')
+            print(tmp_dict)
+
+            print('表二中对应的地址信息如下=====>>:')
+            print(brother_dict)
+
+            brother_in_table3 = new_excel_dict_filtered[brother_dict['group_id']]
+
+            print('表三中对应的地址信息如下=====>>:')
+            print(brother_in_table3)
+
+            print('\n')
+
+    # 8. 对去重后的数据进行处理并写入excel
+    if should_create_new_group_4_increment:
+        process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_grouped, p_new_file='./resources/receiving_address_group_by_2.xls')
+        process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_filtered, p_new_file='./resources/receiving_address_filtered_2.xls')
 
     print('\n程序执行完毕 !!! DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE')
     return 0
