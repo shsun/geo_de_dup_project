@@ -102,12 +102,13 @@ def main(p_args):
             group_id += 1
             # 建立小组
             new_excel_dict_grouped[str(group_id)] = []
+            # Note 加一列数据group_id
             tmp_dict['group_id'] = group_id
         else:
+            # Note 此处要非常注意， 应该使用它兄弟的group_id, 而不是使用最新的group_id
             tmp_dict['group_id'] = brother_dict['group_id']
-        # Note 加一列数据group_id
         new_excel_list_grouped.append(tmp_dict)
-        # 分组, 同一小组的记录具有相同group_id
+        # Note 分组, 同一小组的记录具有相同group_id
         new_excel_dict_grouped[str(tmp_dict['group_id'])].append(tmp_dict)
 
     print('\n组数 group_id=====>>%d' % (group_id))
