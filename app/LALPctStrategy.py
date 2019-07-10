@@ -23,7 +23,7 @@ class LALPctStrategy(object):
             pct_longitude = delta_longitude / p_address_dict_a['经度']
             pct_latitude = delta_latitude / p_address_dict_a['纬度']
 
-            rst = pct_longitude <= 0.01 and pct_latitude <= 0.01
+            rst = pct_longitude <= 0.00001 and pct_latitude <= 0.00001
         except Exception as e:
             pct_longitude = 1
             pct_latitude = 1

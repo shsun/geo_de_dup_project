@@ -22,13 +22,13 @@ class GEODistanceStrategy(object):
         return r
 
     def _getDistance(self, lat1, lng1, lat2, lng2):
-        EARTH_REDIUS = 200
+        EARTH_RADIUS = 6371.393
         radLat1 = self._rad(lat1)
         radLat2 = self._rad(lat2)
         a = radLat1 - radLat2
         b = self._rad(lng1) - self._rad(lng2)
         s = 2 * math.asin(math.sqrt(math.pow(sin(a / 2), 2) + cos(radLat1) * cos(radLat2) * math.pow(sin(b / 2), 2)))
-        s = s * EARTH_REDIUS
+        s = s * EARTH_RADIUS
         return s
 
     def compare(self, p_address_dict_a=None, p_address_dict_b=None):
@@ -37,9 +37,9 @@ class GEODistanceStrategy(object):
         :param p_address_dict_b:
         :return:
         """
-        EARTH_REDIUS = 200
+
 
         s = self._getDistance(p_address_dict_a['纬度'], p_address_dict_a['经度'], p_address_dict_b['纬度'],
                               p_address_dict_b['经度'])
-        rst = s * 1000 <= EARTH_REDIUS
+        rst = s * 1000 <= 200
         return rst
