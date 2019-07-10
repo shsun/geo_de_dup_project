@@ -10,12 +10,12 @@
 * XUtils.py 
 读写excel
 ### resources
-* receiving_address_input_1.xlsx 表1地址信息excel
-* receiving_address_increment_1.xlsx 增量地址信息excel
-* receiving_address_group_by_1.xls 根据表1地址信息excel生成的表2
-* receiving_address_group_by_2.xls 根据(表1地址信息excel+增量地址信息excel)生成的表2
-* receiving_address_filtered_1.xls 根据表1地址信息excel生成的表3
-* receiving_address_filtered_2.xls 根据(表1地址信息excel+增量地址信息excel)生成的表3
+* receiving_address_input_1.xlsx 表1
+* receiving_address_increment_1.xlsx 增量表
+* receiving_address_group_by_1.xls 根据表1生成的表2
+* receiving_address_group_by_2.xls 根据(表1+增量表)生成的表2
+* receiving_address_filtered_1.xls 根据表2生成的表3
+* receiving_address_filtered_2.xls 根据(表2+增量表)生成的表3
 ### doc
 * algorithm.docx 
 算法文档
