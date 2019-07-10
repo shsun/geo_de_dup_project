@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-import sys, os, os.path, xlrd, xlwt
+import pprint, sys, os, os.path, xlrd, xlwt
 import json
 import urllib.request
 from urllib import parse
@@ -26,10 +26,13 @@ class XUtils(object):
 
         doc = urllib.request.urlopen(url)
         s = doc.read().decode('utf-8')
-
-        jsonData = json.loads(s)
-        lat = jsonData['result']['location']['lat']
-        lng = jsonData['result']['location']['lng']
+        try:
+            jsonData = json.loads(s)
+            lat = jsonData['result']['location']['lat']
+            lng = jsonData['result']['location']['lng']
+        except Exception as e:
+            lat = 0.0
+            lng = 0.0
         return lat, lng
 
     @staticmethod

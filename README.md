@@ -11,7 +11,7 @@
 读写excel
 ### resources
 * receiving_address_input_1.xlsx 表1
-* receiving_address_input_2.xlsx 纠正错误后的表1(原始的表1可能会有些数据缺少经纬度)
+* receiving_address_input_1_correct_150_via_baidu.xls 纠正错误后的表1(原始的表1可能会有些数据缺少经纬度)
 * receiving_address_increment_1.xlsx 增量表
 * receiving_address_group_by_1.xls 根据表1生成的表2
 * receiving_address_group_by_2.xls 根据(表1+增量表)生成的表2

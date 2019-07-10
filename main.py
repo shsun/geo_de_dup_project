@@ -69,7 +69,9 @@ def main(p_args):
     excel_title = ['序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度', '标准地址', '标准地址是否新地址']
 
     # 1. 读取地址信息
-    old_excel_list = XUtils.excel_to_list(p_read_excel_file_path='./resources/receiving_address_input_1.xlsx',
+    # receiving_address_input_1.xlsx
+    # receiving_address_input_1_correct_150_via_baidu.xls
+    old_excel_list = XUtils.excel_to_list(p_read_excel_file_path='./resources/receiving_address_input_1_correct_150_via_baidu.xls',
                                           p_sheet_name='Sheet1',
                                           p_excel_title_list=excel_title)
     old_len = len(old_excel_list)
