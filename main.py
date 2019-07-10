@@ -17,7 +17,7 @@
 #
 # **************************************************************************************
 
-import sys, os, os.path, xlrd, xlwt
+import pprint, sys, os, os.path, xlrd, xlwt
 
 from app.GEODistanceStrategy import GEODistanceStrategy
 from app.StringDiffStrategy import StringDiffStrategy
@@ -172,7 +172,8 @@ def main(p_args):
             brother_in_table3 = new_excel_dict_filtered[brother_dict['group_id']]
 
             print('表三中对应的地址信息如下=====>>:')
-            print(brother_in_table3)
+            pp = pprint.PrettyPrinter(indent=4)
+            pp.pprint(brother_in_table3)
 
             print('\n')
 
