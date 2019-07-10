@@ -1,9 +1,36 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 import sys, os, os.path, xlrd, xlwt
+import json
+import urllib.request
+from urllib import parse
 
 
 class XUtils(object):
+
+    @staticmethod
+    def findlogandlat(full_address):
+        """
+
+        :param full_address:
+        :return:
+        """
+        query = {
+            'key': 'lD4KiCvXfGho6afGao2ztKXiUq9rQNmZ',
+            'address': full_address,
+            'output': 'json',
+        }
+
+        base = 'http://api.map.baidu.com/geocoder?'
+        url = base + parse.urlencode(query)
+
+        doc = urllib.request.urlopen(url)
+        s = doc.read().decode('utf-8')
+
+        jsonData = json.loads(s)
+        lat = jsonData['result']['location']['lat']
+        lng = jsonData['result']['location']['lng']
+        return lat, lng
 
     @staticmethod
     def read_excel(p_read_excel_file_path=None):

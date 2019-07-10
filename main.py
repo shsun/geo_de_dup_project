@@ -86,7 +86,8 @@ def main(p_args):
             err_num += 1
     old_excel_list = tmp_old_excel_list
     print('\n经纬度数据有问题的数据条数  invalid data num======>>%d' % (err_num))
-    print('\n真实参与处理的数据条数(即抛弃了非法数据后) old_excel_list length=====>> (%d - %d) = %d\n' % (old_len, err_num, len(old_excel_list)))
+    print('\n真实参与处理的数据条数(即抛弃了非法数据后) old_excel_list length=====>> (%d - %d) = %d\n' % (
+        old_len, err_num, len(old_excel_list)))
 
     # Note 3.
     # Note 总共生成两个表，算上原始表就有三个
@@ -117,7 +118,8 @@ def main(p_args):
     # 4. 对分组后的数据进行处理并写入excel
     # Note 加一列标题group_id
     excel_title.insert(0, 'group_id')
-    process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_grouped, p_new_file='./resources/receiving_address_group_by_1.xls')
+    process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_grouped,
+                             p_new_file='./resources/receiving_address_group_by_1.xls')
 
     # Note 最重要的一步
     # Note 5. 去重, 将去重后的数据存入new_excel_list_filtered中
@@ -136,7 +138,8 @@ def main(p_args):
     print('\n去重后的新数据条数 new_excel_list_filtered length=====>>%d\n' % (len(new_excel_list_filtered)))
 
     # 6. 对去重后的数据进行处理并写入excel
-    process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_filtered, p_new_file='./resources/receiving_address_filtered_1.xls')
+    process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_filtered,
+                             p_new_file='./resources/receiving_address_filtered_1.xls')
 
     # 7. 读取增量excel(实际excel中就一条) 至 old_excel_list 中
     excel_title.remove('group_id')
@@ -179,8 +182,10 @@ def main(p_args):
 
     # 8. 对去重后的数据进行处理并写入excel
     if should_create_new_group_4_increment:
-        process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_grouped, p_new_file='./resources/receiving_address_group_by_2.xls')
-        process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_filtered, p_new_file='./resources/receiving_address_filtered_2.xls')
+        process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_grouped,
+                                 p_new_file='./resources/receiving_address_group_by_2.xls')
+        process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_filtered,
+                                 p_new_file='./resources/receiving_address_filtered_2.xls')
 
     print('\n程序执行完毕 !!! DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE')
     return 0
@@ -203,4 +208,10 @@ def process_and_dump_2_excel(p_excel_title=None, p_new_excel_list=None, p_new_fi
 
 if __name__ == '__main__':
     # NOTE 程序入口
+
+    # 115.951342, 36.504032
+
+    # 维度, 经度
+    # lat, lng = XUtils.findlogandlat('山东省聊城市东昌府区聊城市嘉明经济开发区嘉和路1号')
+
     sys.exit(main(sys.argv))
