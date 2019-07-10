@@ -43,9 +43,10 @@ def contains(p_new_excel_list=None, p_old_dict=None):
     判断
     :param p_new_excel_list:
     :param p_old_dict:
-    :return:
+    :return: rst为true的时候表示能够在p_new_excel_list找到兄弟节点， 否则找不到兄弟节点。 (所谓兄弟节点就是指着这2个点认为是同一个地址), brother_dict是p_old_dict的兄弟节点.
     """
     rst = False
+    brother_dict = None
     for tmp_new_dict in p_new_excel_list:
 
         # NOTE 通过对经纬度的比较，相差百分之一或更小以内的视为同一地址，否则视为两个地址
@@ -59,8 +60,9 @@ def contains(p_new_excel_list=None, p_old_dict=None):
         # rst = StringDiffStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
 
         if rst is True:
+            brother_dict = tmp_new_dict
             break
-    return rst
+    return rst, brother_dict
 
 
 def main(p_args):
@@ -95,16 +97,19 @@ def main(p_args):
     new_excel_list_grouped = []
     group_id = 0
     for tmp_dict in old_excel_list:
-        rst = contains(p_new_excel_list=new_excel_list_grouped, p_old_dict=tmp_dict)
+        rst, brother_dict = contains(p_new_excel_list=new_excel_list_grouped, p_old_dict=tmp_dict)
         if rst is False:
             group_id += 1
             # 建立小组
             new_excel_dict_grouped[str(group_id)] = []
+            tmp_dict['group_id'] = group_id
+        else:
+            tmp_dict['group_id'] = brother_dict['group_id']
         # Note 加一列数据group_id
-        tmp_dict['group_id'] = group_id
         new_excel_list_grouped.append(tmp_dict)
         # 分组, 同一小组的记录具有相同group_id
-        new_excel_dict_grouped[str(group_id)].append(tmp_dict)
+        new_excel_dict_grouped[str(tmp_dict['group_id'])].append(tmp_dict)
+
     print('\n组数 group_id=====>>%d' % (group_id))
     print('\n分组后的新数据条数 new_excel_list_grouped length=====>>%d\n' % (len(new_excel_list_grouped)))
 
