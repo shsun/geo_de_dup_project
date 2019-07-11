@@ -1,6 +1,6 @@
 # geo_de_dup_project
 
-## pip3 install numpy
+## how to install venv https://shsun.github.io/2019/05/06/install_lib_on_venv_4_python/
 
 ## 目录结构
 ### main.py
