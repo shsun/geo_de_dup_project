@@ -15,8 +15,8 @@
 * receiving_address_input_1.xlsx 表1一共4636条(最原始的)
 * receiving_address_input_1_ok.xls 表1一共4486条(删除了150条脏数据的)
 * receiving_address_stock_1_ok.xls 表1一共4386条(删除了100条增量试验数据)
-* receiving_address_increment_1_ok.xls 表1(100条增量试验数据)
-* receiving_address_increment_1.xls 增量表
+* receiving_address_increment_1_ok.xls 增量表(从表1内随机偷走100条作为增量试验数据)
+* receiving_address_increment_1.xls 增量表(废弃)
 * receiving_address_increment_match_success.xls 增量表(匹配成功的)
 * receiving_address_increment_match_failed.xls 增量表(匹配失败的, 会开新组)
 * receiving_address_increment_brother_in_table3.xls 匹配成功的兄弟们(即表3里的)
