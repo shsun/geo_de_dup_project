@@ -8,15 +8,15 @@ import warnings
 
 class CosineSimilarityStrategy(object):
     """
-    Latitude and Longitude
+    利用余弦相似度公式计算两字符串的相似性
+    https://blog.csdn.net/weixin_44208569/article/details/90315904
     """
 
     def __init__(self):
         pass
 
     def compare(self, p_address_dict_a=None, p_address_dict_b=None):
-        """利用余弦相似度公式计算两字符串的相似性
-        https://blog.csdn.net/weixin_44208569/article/details/90315904
+        """
         :param p_address_dict_a:
         :param p_address_dict_b:
         :return:
