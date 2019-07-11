@@ -72,9 +72,9 @@ def contains(p_new_excel_list=None, p_old_dict=None):
 def main(p_args):
     excel_title = ['序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度', '标准地址', '标准地址是否新地址']
 
-    # 1. 读取地址信息
-    EXCEL_TABLE1 = './resources/receiving_address_input_1.xlsx'
-    # EXCEL_TABLE1 = './resources/receiving_address_input_1_correct_150_via_baidu.xls'
+    # 1. 读取地址信息 NOTE 看这里
+    # EXCEL_TABLE1 = './resources/receiving_address_input_1.xlsx'
+    EXCEL_TABLE1 = './resources/receiving_address_stock_1_ok.xls'
     old_excel_list = XUtils.excel_to_list(p_read_excel_file_path=EXCEL_TABLE1,
                                           p_sheet_name='Sheet1',
                                           p_excel_title_list=excel_title)

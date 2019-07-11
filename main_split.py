@@ -12,7 +12,7 @@ from app.XUtils import XUtils
 
 
 def main(p_args):
-    # Note
+    # Note 看这里 如果想做50个增量， 就把这个100改成50
     G_INCREMENT_SIZE = 100
     excel_title = ['序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度', '标准地址', '标准地址是否新地址']
 

@@ -13,7 +13,6 @@
 读写excel
 ### resources
 * receiving_address_input_1.xlsx 表1(最原始的)
-* receiving_address_input_1_correct_150_via_baidu.xls 纠正错误后的表1(原始的表1可能会有些数据缺少经纬度; 此处也并非能全部纠正的, 可能有些数据地址本身就有问题, 以致经纬度无法纠正)--
 * receiving_address_input_1_ok.xls 表1(删除了150条脏数据的)
 * receiving_address_stock_1_ok.xls 表1(删除了150条脏数据且删除了100条增量试验数据)
 * receiving_address_increment_1_ok.xls 表1(100条试验数据)
