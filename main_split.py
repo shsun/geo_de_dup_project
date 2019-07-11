@@ -12,6 +12,8 @@ from app.XUtils import XUtils
 
 
 def main(p_args):
+    # Note
+    G_INCREMENT_SIZE = 100
     excel_title = ['序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度', '标准地址', '标准地址是否新地址']
 
     # 1. 读取地址信息
@@ -34,25 +36,32 @@ def main(p_args):
     print('\n真实参与处理的数据条数(即抛弃了非法数据后) old_excel_list length=====>> (%d - %d) = %d\n' % (
         old_len, err_num, len(old_excel_list)))
 
+    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=old_excel_list,
+                                    p_new_file='./resources/receiving_address_input_1_ok.xls')
+
     increment_dict = {}
-    while len(increment_dict) < 100:
+    while len(increment_dict) < G_INCREMENT_SIZE:
         random_index = random.randint(0, len(old_excel_list) - 1)
         increment_dict[random_index] = 'yes'
 
     # 100条增量
     increment_list = []
+    for (k, v) in increment_dict.items():
+        tmp = old_excel_list[k]
+        increment_list.append(tmp)
+    for tmp in increment_list:
+        old_excel_list.remove(tmp)
     # 4386条存量(即表1)
-    stock_list = []
+    stock_list = old_excel_list
 
-    for i in range(0, len(old_excel_list)):
-        for (k, v) in increment_dict.items():
-            if k == i:
-                increment_list.append(old_excel_list[i])
-            else:
-                stock_list.append(old_excel_list[i])
+    print('存量 increment_list.length===>%d' % (len(increment_list)))
+    print('删除了存量后的表1 stock_list.length===>%d' % (len(stock_list)))
 
-    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=old_excel_list,
-                                    p_new_file='./resources/receiving_address_input_1_ok.xls')
+    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=stock_list,
+                                    p_new_file='./resources/receiving_address_stock_1_ok.xls')
+
+    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=increment_list,
+                                    p_new_file='./resources/receiving_address_increment_1_ok.xls')
 
     return 0
 
