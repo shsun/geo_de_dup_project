@@ -12,9 +12,9 @@
 * XUtils.py 
 读写excel
 ### resources
-* receiving_address_input_1.xlsx 表1(最原始的)
-* receiving_address_input_1_ok.xls 表1(删除了150条脏数据的)
-* receiving_address_stock_1_ok.xls 表1(删除了150条脏数据且删除了100条增量试验数据)
+* receiving_address_input_1.xlsx 表1一共4486+150条(最原始的)
+* receiving_address_input_1_ok.xls 表1一共4486条(删除了150条脏数据的)
+* receiving_address_stock_1_ok.xls 表1一共4386条(删除了150条脏数据且删除了100条增量试验数据)
 * receiving_address_increment_1_ok.xls 表1(100条试验数据)
 * receiving_address_increment_1.xlsx 增量表
 * receiving_address_group_by_1.xls 根据表1生成的表2
