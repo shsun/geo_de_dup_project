@@ -16,11 +16,15 @@
 * receiving_address_input_1_ok.xls 表1一共4486条(删除了150条脏数据的)
 * receiving_address_stock_1_ok.xls 表1一共4386条(删除了100条增量试验数据)
 * receiving_address_increment_1_ok.xls 表1(100条增量试验数据)
-* receiving_address_increment_1.xlsx 增量表
+* receiving_address_increment_1.xls 增量表
+* receiving_address_increment_match_success.xls 增量表(匹配成功的)
+* receiving_address_increment_match_failed.xls 增量表(匹配失败的, 会开新组)
+* receiving_address_increment_brother_in_table3.xls 匹配成功的兄弟们(即表3里的)
 * receiving_address_group_by_1.xls 根据表1生成的表2
 * receiving_address_group_by_2.xls 根据(表1+增量表)生成的表2
 * receiving_address_filtered_1.xls 根据表2生成的表3
 * receiving_address_filtered_2.xls 根据(表2+增量表)生成的表3
+
 ### doc
 * algorithm.docx 
 算法文档
