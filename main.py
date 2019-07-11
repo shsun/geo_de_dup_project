@@ -180,7 +180,7 @@ def main(p_args):
             tmp_dict['标准地址'] = '匹配成功'
             tmp_dict['group_id'] = brother_dict['group_id']
             increment_list_match_success.append(tmp_dict)
-            
+
             print('表三中对应的地址信息如下=====>>:')
             brother_in_table3 = new_excel_dict_filtered[tmp_dict['group_id']]
             pp = pprint.PrettyPrinter(indent=4)
