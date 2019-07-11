@@ -22,6 +22,7 @@ import pprint, sys, os, os.path, xlrd, xlwt
 from app.GEODistanceStrategy import GEODistanceStrategy
 from app.StringDiffStrategy import StringDiffStrategy
 from app.LALPctStrategy import LALPctStrategy
+from app.CosineSimilarityStrategy import CosineSimilarityStrategy
 from app.XUtils import XUtils
 
 
@@ -53,11 +54,14 @@ def contains(p_new_excel_list=None, p_old_dict=None):
         # rst = LALPctStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
 
         # Note 根据距离来判断(200米)
-        rst = GEODistanceStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
+        # rst = GEODistanceStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
 
         # Note 计算字符匹配度
         # 详细地址（拼接省市区）匹配度; 详细地址(PROD地址) 匹配度
         # rst = StringDiffStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
+
+        # Note 利用余弦相似度公式计算两字符串的相似性 (相似度达到0.8则认为是一个地址，否则是2个不同地址, 这个0.8我是随便写的, 可修改)
+        rst = CosineSimilarityStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
 
         if rst is True:
             brother_dict = tmp_new_dict
@@ -69,9 +73,9 @@ def main(p_args):
     excel_title = ['序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度', '标准地址', '标准地址是否新地址']
 
     # 1. 读取地址信息
-    # receiving_address_input_1.xlsx
-    # receiving_address_input_1_correct_150_via_baidu.xls
-    old_excel_list = XUtils.excel_to_list(p_read_excel_file_path='./resources/receiving_address_input_1_correct_150_via_baidu.xls',
+    EXCEL_TABLE1 = './resources/receiving_address_input_1.xlsx'
+    # EXCEL_TABLE1 = './resources/receiving_address_input_1_correct_150_via_baidu.xls'
+    old_excel_list = XUtils.excel_to_list(p_read_excel_file_path=EXCEL_TABLE1,
                                           p_sheet_name='Sheet1',
                                           p_excel_title_list=excel_title)
     old_len = len(old_excel_list)
@@ -120,8 +124,8 @@ def main(p_args):
     # 4. 对分组后的数据进行处理并写入excel
     # Note 加一列标题group_id
     excel_title.insert(0, 'group_id')
-    process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_grouped,
-                             p_new_file='./resources/receiving_address_group_by_1.xls')
+    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_grouped,
+                                    p_new_file='./resources/receiving_address_group_by_1.xls')
 
     # Note 最重要的一步
     # Note 5. 去重, 将去重后的数据存入new_excel_list_filtered中
@@ -140,8 +144,8 @@ def main(p_args):
     print('\n去重后的新数据条数 new_excel_list_filtered length=====>>%d\n' % (len(new_excel_list_filtered)))
 
     # 6. 对去重后的数据进行处理并写入excel
-    process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_filtered,
-                             p_new_file='./resources/receiving_address_filtered_1.xls')
+    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_filtered,
+                                    p_new_file='./resources/receiving_address_filtered_1.xls')
 
     # 7. 读取增量excel(实际excel中就一条) 至 old_excel_list 中
     excel_title.remove('group_id')
@@ -184,28 +188,13 @@ def main(p_args):
 
     # 8. 对去重后的数据进行处理并写入excel
     if should_create_new_group_4_increment:
-        process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_grouped,
-                                 p_new_file='./resources/receiving_address_group_by_2.xls')
-        process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_filtered,
-                                 p_new_file='./resources/receiving_address_filtered_2.xls')
+        XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_grouped,
+                                        p_new_file='./resources/receiving_address_group_by_2.xls')
+        XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_filtered,
+                                        p_new_file='./resources/receiving_address_filtered_2.xls')
 
     print('\n程序执行完毕 !!! DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE')
     return 0
-
-
-def process_and_dump_2_excel(p_excel_title=None, p_new_excel_list=None, p_new_file=None):
-    stus = [p_excel_title]
-    for tmp_dict in p_new_excel_list:
-        arr = []
-        for title in p_excel_title:
-            value = tmp_dict[title]
-            arr.append(value)
-        stus.append(arr)
-
-    if os.path.exists(p_new_file):
-        os.remove(p_new_file)
-    success = XUtils.dict_to_excel(p_write_excel_file_path=p_new_file, p_sheet_name='Sheet1', p_dict_content=stus,
-                                   p_excel_title_list=p_excel_title)
 
 
 if __name__ == '__main__':
@@ -215,5 +204,15 @@ if __name__ == '__main__':
 
     # 维度, 经度
     # lat, lng = XUtils.findlogandlat('山东省聊城市东昌府区聊城市嘉明经济开发区嘉和路1号')
+
+    # s1 = "hi，今天温度是12摄氏度。"
+    # s2 = "hello，今天温度很高。"
+    #
+    # strategy = CosineSimilarityStrategy()
+    # vec1, vec2 = strategy.get_word_vector(s1, s2)
+    # dist1 = strategy.cos_dist(vec1, vec2)
+    #
+    # print('?????')
+    # print(dist1)
 
     sys.exit(main(sys.argv))

@@ -1,5 +1,7 @@
 # geo_de_dup_project
 
+## pip3 install numpy
+
 ## 目录结构
 ### main.py
 ### app

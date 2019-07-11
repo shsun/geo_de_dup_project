@@ -40,25 +40,10 @@ def main(p_args):
     print('\n经纬度数据有问题的数据条数  invalid data num======>>%d' % (err_num))
     print('\n利用百度地图API纠正的数据条数=======>>%d,   无法纠正的数据条数======>>%d' % ((err_num - final_err_num), final_err_num))
 
-    process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=old_excel_list,
-                             p_new_file='./resources/receiving_address_input_1_correct_150_via_baidu.xls')
+    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=old_excel_list,
+                                    p_new_file='./resources/receiving_address_input_1_correct_150_via_baidu.xls')
 
     return 0
-
-
-def process_and_dump_2_excel(p_excel_title=None, p_new_excel_list=None, p_new_file=None):
-    stus = [p_excel_title]
-    for tmp_dict in p_new_excel_list:
-        arr = []
-        for title in p_excel_title:
-            value = tmp_dict[title]
-            arr.append(value)
-        stus.append(arr)
-
-    if os.path.exists(p_new_file):
-        os.remove(p_new_file)
-    success = XUtils.dict_to_excel(p_write_excel_file_path=p_new_file, p_sheet_name='Sheet1', p_dict_content=stus,
-                                   p_excel_title_list=p_excel_title)
 
 
 if __name__ == '__main__':

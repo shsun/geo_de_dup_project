@@ -9,6 +9,21 @@ from urllib import parse
 class XUtils(object):
 
     @staticmethod
+    def process_and_dump_2_excel(p_excel_title=None, p_new_excel_list=None, p_new_file=None):
+        stus = [p_excel_title]
+        for tmp_dict in p_new_excel_list:
+            arr = []
+            for title in p_excel_title:
+                value = tmp_dict[title]
+                arr.append(value)
+            stus.append(arr)
+
+        if os.path.exists(p_new_file):
+            os.remove(p_new_file)
+        success = XUtils.dict_to_excel(p_write_excel_file_path=p_new_file, p_sheet_name='Sheet1', p_dict_content=stus,
+                                       p_excel_title_list=p_excel_title)
+
+    @staticmethod
     def findlogandlat(full_address):
         """
 
