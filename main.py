@@ -195,6 +195,7 @@ def main(p_args):
     for tmp_dict in increment_list_match_success:
         print('表三中对应的地址信息如下=====>>:')
         brother_in_table3 = new_excel_dict_filtered[tmp_dict['group_id']]
+        brother_in_table3['标准地址是否新地址'] = '我是存量'
         pp = pprint.PrettyPrinter(indent=4)
         pp.pprint(brother_in_table3)
         brother_in_table3_of_increment_list.append(brother_in_table3)
@@ -210,6 +211,9 @@ def main(p_args):
                                     p_new_file='./resources/receiving_address_increment_brother_in_table3.xls')
     XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=increment_list_match_failed,
                                     p_new_file='./resources/receiving_address_increment_match_failed.xls')
+    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=(
+                increment_list_match_success + increment_list_match_success.append),
+                                    p_new_file='./resources/receiving_address_compare.xls')
 
     # 8. 对去重后的数据进行处理并写入excel
     if should_create_new_group_4_increment:

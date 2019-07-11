@@ -20,6 +20,7 @@
 * receiving_address_increment_match_success.xls 增量表(匹配成功的)
 * receiving_address_increment_match_failed.xls 增量表(匹配失败的, 会开新组)
 * receiving_address_increment_brother_in_table3.xls 匹配成功的兄弟们(即表3里的)
+* receiving_address_compare.xls 对比一下
 * receiving_address_group_by_1.xls 根据表1生成的表2
 * receiving_address_group_by_2.xls 根据(表1+增量表)生成的表2
 * receiving_address_filtered_1.xls 根据表2生成的表3
