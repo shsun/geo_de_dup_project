@@ -212,7 +212,7 @@ def main(p_args):
     XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=increment_list_match_failed,
                                     p_new_file='./resources/receiving_address_increment_match_failed.xls')
     XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=(
-                increment_list_match_success + increment_list_match_success.append),
+                increment_list_match_success + brother_in_table3_of_increment_list),
                                     p_new_file='./resources/receiving_address_compare.xls')
 
     # 8. 对去重后的数据进行处理并写入excel
