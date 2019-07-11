@@ -149,7 +149,9 @@ def main(p_args):
 
     # 7. 读取增量excel(实际excel中就一条) 至 old_excel_list 中
     excel_title.remove('group_id')
-    old_excel_list = XUtils.excel_to_list(p_read_excel_file_path='./resources/receiving_address_increment_1.xlsx',
+    # EXCEL_TABLE_INCREMENT = './resources/receiving_address_increment_1.xlsx'
+    EXCEL_TABLE_INCREMENT = './resources/receiving_address_increment_1_ok.xls'
+    old_excel_list = XUtils.excel_to_list(p_read_excel_file_path=EXCEL_TABLE_INCREMENT,
                                           p_sheet_name='Sheet1',
                                           p_excel_title_list=excel_title)
     should_create_new_group_4_increment = False
