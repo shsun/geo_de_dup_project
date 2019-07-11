@@ -157,6 +157,7 @@ def main(p_args):
                                           p_excel_title_list=excel_title)
     print('\n增量数据条数 old_excel_list length=====>>%d\n' % (len(old_excel_list)))
     increment_list_match_success = []
+    brother_in_table3_of_increment_list = []
     increment_list_match_failed = []
     should_create_new_group_4_increment = False
     excel_title.insert(0, 'group_id')
@@ -185,6 +186,7 @@ def main(p_args):
             brother_in_table3 = new_excel_dict_filtered[tmp_dict['group_id']]
             pp = pprint.PrettyPrinter(indent=4)
             pp.pprint(brother_in_table3)
+            brother_in_table3_of_increment_list.append(brother_in_table3)
             pass
 
     new_excel_list_filtered = []
@@ -197,9 +199,13 @@ def main(p_args):
 
     # TODO 最后100条测试数据，匹配成功的，看看能否将数据输出成Excel，就是，前几列信息匹配成功的增量数据，然后后几列是匹配到的表三数据
     print('\n增量匹配成功的数据条数 increment_list_match_success length=====>>%d\n' % (len(increment_list_match_success)))
+    print('\n增量匹配成功的兄弟们 brother_in_table3_of_increment_list length=====>>%d\n' % (
+        len(brother_in_table3_of_increment_list)))
     print('\n增量匹配失败的数据条数 increment_list_match_success length=====>>%d\n' % (len(increment_list_match_failed)))
     XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=increment_list_match_success,
                                     p_new_file='./resources/receiving_address_increment_match_success.xls')
+    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=brother_in_table3_of_increment_list,
+                                    p_new_file='./resources/receiving_address_increment_brother_in_table3.xls')
     XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=increment_list_match_failed,
                                     p_new_file='./resources/receiving_address_increment_match_failed.xls')
 
