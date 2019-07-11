@@ -127,7 +127,8 @@ def main(p_args):
     # 4. 对分组后的数据进行处理并写入excel
     # Note 加一列标题group_id
     excel_title.insert(0, 'group_id')
-    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_grouped,
+    sorted_list = sorted(new_excel_list_grouped, key=lambda x: x['group_id'], reverse=False)
+    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
                                     p_new_file='./resources/receiving_address_group_by_1.xls')
 
     # Note 最重要的一步
@@ -147,7 +148,8 @@ def main(p_args):
     print('\n去重后的新数据条数 new_excel_list_filtered length=====>>%d\n' % (len(new_excel_list_filtered)))
 
     # 6. 对去重后的数据进行处理并写入excel
-    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_filtered,
+    sorted_list = sorted(new_excel_list_filtered, key=lambda x: x['group_id'], reverse=False)
+    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
                                     p_new_file='./resources/receiving_address_filtered_1.xls')
 
     # 7. 读取增量excel(实际excel中就一条) 至 old_excel_list 中
@@ -199,8 +201,8 @@ def main(p_args):
         print('表三中对应的地址信息如下=====>>:')
         brother_in_table3 = new_excel_dict_filtered[tmp_dict['group_id']]
         brother_in_table3['标准地址是否新地址'] = '我是存量'
-        pp = pprint.PrettyPrinter(indent=4)
-        pp.pprint(brother_in_table3)
+        # pp = pprint.PrettyPrinter(indent=4)
+        # pp.pprint(brother_in_table3)
         brother_in_table3_of_increment_list.append(brother_in_table3)
 
     # TODO 最后100条测试数据，匹配成功的，看看能否将数据输出成Excel，就是，前几列信息匹配成功的增量数据，然后后几列是匹配到的表三数据
@@ -208,11 +210,17 @@ def main(p_args):
     print('\n增量匹配成功的兄弟们 brother_in_table3_of_increment_list length=====>>%d\n' % (
         len(brother_in_table3_of_increment_list)))
     print('\n增量匹配失败的数据条数 increment_list_match_success length=====>>%d\n' % (len(increment_list_match_failed)))
-    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=increment_list_match_success,
+
+    sorted_list = sorted(increment_list_match_success, key=lambda x: x['group_id'], reverse=False)
+    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
                                     p_new_file='./resources/receiving_address_increment_match_success.xls')
-    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=brother_in_table3_of_increment_list,
+
+    sorted_list = sorted(brother_in_table3_of_increment_list, key=lambda x: x['group_id'], reverse=False)
+    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
                                     p_new_file='./resources/receiving_address_increment_brother_in_table3.xls')
-    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=increment_list_match_failed,
+
+    sorted_list = sorted(increment_list_match_failed, key=lambda x: x['group_id'], reverse=False)
+    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
                                     p_new_file='./resources/receiving_address_increment_match_failed.xls')
     #
     increment_list_match_success.extend(brother_in_table3_of_increment_list)
@@ -222,9 +230,11 @@ def main(p_args):
 
     # 8. 对去重后的数据进行处理并写入excel
     if should_create_new_group_4_increment:
-        XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_grouped,
+        sorted_list = sorted(new_excel_list_grouped, key=lambda x: x['group_id'], reverse=False)
+        XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
                                         p_new_file='./resources/receiving_address_group_by_2.xls')
-        XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=new_excel_list_filtered,
+        sorted_list = sorted(new_excel_list_filtered, key=lambda x: x['group_id'], reverse=False)
+        XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
                                         p_new_file='./resources/receiving_address_filtered_2.xls')
 
     print('\n程序执行完毕 !!! DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE')
