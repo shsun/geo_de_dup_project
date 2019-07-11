@@ -79,7 +79,7 @@ def main(p_args):
                                           p_sheet_name='Sheet1',
                                           p_excel_title_list=excel_title)
     old_len = len(old_excel_list)
-    print('\n最原始的数据总条数old_excel_list length=====>>%d' % (old_len))
+    print('\n表1数据总条数old_excel_list length=====>>%d' % (old_len))
     # 2. 丢弃经纬度有问题的数据, 只留下经纬度正确的数据
     err_num = 0
     tmp_old_excel_list = []
