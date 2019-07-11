@@ -54,7 +54,7 @@ def contains(p_new_excel_list=None, p_old_dict=None):
         # rst_lal = LALPctStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
 
         # Note 根据距离来判断(200米)
-        rst_distance = GEODistanceStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
+        # rst_distance = GEODistanceStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
 
         # Note 计算字符匹配度
         # 详细地址（拼接省市区）匹配度; 详细地址(PROD地址) 匹配度
@@ -63,7 +63,9 @@ def contains(p_new_excel_list=None, p_old_dict=None):
         # Note 利用余弦相似度公式计算两字符串的相似性 (相似度达到0.8则认为是一个地址，否则是2个不同地址, 这个0.8我是随便写的, 可修改)
         # rst_cos_sim = CosineSimilarityStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
 
-        rst = rst_distance is True and rst_str_diff is True
+        # rst = rst_distance is True and rst_str_diff is True
+        rst = rst_str_diff is True
+
         if rst is True:
             brother_dict = tmp_new_dict
             break
@@ -214,7 +216,8 @@ def main(p_args):
                                     p_new_file='./resources/receiving_address_increment_match_failed.xls')
     #
     increment_list_match_success.extend(brother_in_table3_of_increment_list)
-    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=increment_list_match_success,
+    sorted_list = sorted(increment_list_match_success, key=lambda x: x['group_id'], reverse=False)
+    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
                                     p_new_file='./resources/receiving_address_compare.xls')
 
     # 8. 对去重后的数据进行处理并写入excel
@@ -230,22 +233,5 @@ def main(p_args):
 
 if __name__ == '__main__':
     # NOTE 程序入口
-
     warnings.filterwarnings('ignore')
-
-    # 115.951342, 36.504032
-
-    # 维度, 经度
-    # lat, lng = XUtils.findlogandlat('山东省聊城市东昌府区聊城市嘉明经济开发区嘉和路1号')
-
-    # s1 = "hi，今天温度是12摄氏度。"
-    # s2 = "hello，今天温度很高。"
-    #
-    # strategy = CosineSimilarityStrategy()
-    # vec1, vec2 = strategy.get_word_vector(s1, s2)
-    # dist1 = strategy.cos_dist(vec1, vec2)
-    #
-    # print('?????')
-    # print(dist1)
-
     sys.exit(main(sys.argv))

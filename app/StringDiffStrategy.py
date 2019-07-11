@@ -19,19 +19,17 @@ class StringDiffStrategy(object):
         :param p_address_dict_b:
         :return:详细地址（拼接省市区）匹配度; 详细地址(PROD地址) 匹配度
         """
-
-        # excel_title = ['序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度', '标准地址', '标准地址是否新地址']
-
         query_str = p_address_dict_a['详细地址（拼接省市区）']
         s1 = p_address_dict_b['详细地址（拼接省市区）']
         r1 = difflib.SequenceMatcher(None, query_str, s1).quick_ratio()
 
-        # query_str = p_address_dict_A['详细地址(PROD地址)']
-        # s1 = p_address_dict_B['详细地址(PROD地址)']
-        # r2 = difflib.SequenceMatcher(None, query_str, s1).quick_ratio()
-        r2 = 1
-
+        try:
+            query_str = p_address_dict_a['详细地址(PROD地址)']
+            s1 = p_address_dict_b['详细地址(PROD地址)']
+            r2 = difflib.SequenceMatcher(None, query_str, s1).quick_ratio()
+        except Exception as e:
+            r2 = 1.0
         # 详细地址（拼接省市区）匹配度
         # 详细地址(PROD地址) 匹配度
 
-        return r1 >= 0.8
+        return r1 >= 0.8 and r2 >= 0.8
