@@ -34,4 +34,4 @@ class StringDiffStrategy(object):
         # 详细地址（拼接省市区）匹配度
         # 详细地址(PROD地址) 匹配度
 
-        return r1 >= 0.9
+        return r1 >= 0.8
