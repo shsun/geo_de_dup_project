@@ -149,6 +149,7 @@ def main(p_args):
 
     # 7. 读取增量excel(实际excel中就一条) 至 old_excel_list 中
     excel_title.remove('group_id')
+    # NOTE 看过来
     # EXCEL_TABLE_INCREMENT = './resources/receiving_address_increment_1.xlsx'
     EXCEL_TABLE_INCREMENT = './resources/receiving_address_increment_1_ok.xls'
     old_excel_list = XUtils.excel_to_list(p_read_excel_file_path=EXCEL_TABLE_INCREMENT,
@@ -170,15 +171,18 @@ def main(p_args):
             new_excel_dict_grouped[str(tmp_dict['group_id'])].append(tmp_dict)
 
             new_excel_list_filtered.append(tmp_dict)
+            tmp_dict['标准地址'] = '我是增量'
+            print('\n增量地址信息如下===匹配失败==>>:')
+            print(tmp_dict)
 
             should_create_new_group_4_increment = True
         else:
             # 8.
-            print('\n增量地址信息如下=====>>:')
+            print('\n增量地址信息如下===匹配成功==>>:')
             print(tmp_dict)
 
-            print('表二中对应的地址信息如下=====>>:')
-            print(brother_dict)
+            # print('表二中对应的地址信息如下=====>>:')
+            # print(brother_dict)
 
             brother_in_table3 = new_excel_dict_filtered[brother_dict['group_id']]
 
