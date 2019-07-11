@@ -181,12 +181,6 @@ def main(p_args):
             tmp_dict['标准地址'] = '匹配成功'
             tmp_dict['group_id'] = brother_dict['group_id']
             increment_list_match_success.append(tmp_dict)
-
-            print('表三中对应的地址信息如下=====>>:')
-            brother_in_table3 = new_excel_dict_filtered[tmp_dict['group_id']]
-            pp = pprint.PrettyPrinter(indent=4)
-            pp.pprint(brother_in_table3)
-            brother_in_table3_of_increment_list.append(brother_in_table3)
             pass
 
     new_excel_list_filtered = []
@@ -196,6 +190,14 @@ def main(p_args):
         rst = fetch_max_length_item(p_excel_sub_list=value)
         new_excel_list_filtered.append(rst)
         new_excel_dict_filtered[rst['group_id']] = rst
+
+    #
+    for tmp_dict in increment_list_match_success:
+        print('表三中对应的地址信息如下=====>>:')
+        brother_in_table3 = new_excel_dict_filtered[tmp_dict['group_id']]
+        pp = pprint.PrettyPrinter(indent=4)
+        pp.pprint(brother_in_table3)
+        brother_in_table3_of_increment_list.append(brother_in_table3)
 
     # TODO 最后100条测试数据，匹配成功的，看看能否将数据输出成Excel，就是，前几列信息匹配成功的增量数据，然后后几列是匹配到的表三数据
     print('\n增量匹配成功的数据条数 increment_list_match_success length=====>>%d\n' % (len(increment_list_match_success)))
