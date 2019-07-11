@@ -17,7 +17,7 @@
 #
 # **************************************************************************************
 
-import pprint, sys, os, os.path, xlrd, xlwt
+import warnings, pprint, sys, os, os.path, xlrd, xlwt
 
 from app.GEODistanceStrategy import GEODistanceStrategy
 from app.StringDiffStrategy import StringDiffStrategy
@@ -200,6 +200,8 @@ def main(p_args):
 if __name__ == '__main__':
     # NOTE 程序入口
 
+    warnings.filterwarnings('ignore')
+    
     # 115.951342, 36.504032
 
     # 维度, 经度
