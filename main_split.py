@@ -49,6 +49,7 @@ def main(p_args):
     for (k, v) in increment_dict.items():
         tmp = old_excel_list[k]
         increment_list.append(tmp)
+    # 将增量数据删除
     for tmp in increment_list:
         old_excel_list.remove(tmp)
     # 4386条存量(即表1)

@@ -160,37 +160,53 @@ def main(p_args):
     for tmp_dict in old_excel_list:
         rst, brother_dict = contains(p_new_excel_list=new_excel_list_grouped, p_old_dict=tmp_dict)
         if rst is False:
+            tmp_dict['标准地址'] = '我是增量'
+
             group_id += 1
+            tmp_dict['group_id'] = group_id
+
+            # 需要进表2的数据
+            new_excel_list_grouped.append(tmp_dict)
             # 建立小组
             new_excel_dict_grouped[str(group_id)] = []
-            # Note 加一列数据group_id
-            tmp_dict['group_id'] = group_id
-            #
-            new_excel_list_grouped.append(tmp_dict)
-            # Note 分组, 同一小组的记录具有相同group_id
             new_excel_dict_grouped[str(tmp_dict['group_id'])].append(tmp_dict)
 
-            new_excel_list_filtered.append(tmp_dict)
-            tmp_dict['标准地址'] = '我是增量'
-            print('\n增量地址信息如下===匹配失败==>>:')
-            print(tmp_dict)
+            # 需要进表3的增量数据
+            # new_excel_list_filtered.append(tmp_dict)
+            # new_excel_dict_filtered[str(tmp_dict['group_id'])] = tmp_dict
+            # print('\n增量地址信息如下===匹配失败==>>:')
+            # print(tmp_dict)
 
+            # print(str(tmp_dict['group_id']))
+            #
             should_create_new_group_4_increment = True
+
         else:
             # 8.
-            print('\n增量地址信息如下===匹配成功==>>:')
-            print(tmp_dict)
+            # print('\n增量地址信息如下===匹配成功==>>:')
+            # print(tmp_dict)
 
             # print('表二中对应的地址信息如下=====>>:')
             # print(brother_dict)
 
-            brother_in_table3 = new_excel_dict_filtered[brother_dict['group_id']]
+            # brother_in_table3 = new_excel_dict_filtered[brother_dict['group_id']]
 
-            print('表三中对应的地址信息如下=====>>:')
-            pp = pprint.PrettyPrinter(indent=4)
-            pp.pprint(brother_in_table3)
+            # print('表三中对应的地址信息如下=====>>:')
+            # pp = pprint.PrettyPrinter(indent=4)
+            # pp.pprint(brother_in_table3)
+            pass
 
             print('\n')
+
+    new_excel_list_filtered = []
+    new_excel_dict_filtered = {}
+    # Note 注意， 这个value是一个list
+    for (key, value) in new_excel_dict_grouped.items():
+        rst = fetch_max_length_item(p_excel_sub_list=value)
+        new_excel_list_filtered.append(rst)
+        new_excel_dict_filtered[rst['group_id']] = rst
+
+
 
     # TODO 最后100条测试数据，匹配成功的，看看能否将数据输出成Excel，就是，前几列信息匹配成功的增量数据，然后后几列是匹配到的表三数据
 
