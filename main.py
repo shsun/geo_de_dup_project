@@ -211,8 +211,9 @@ def main(p_args):
                                     p_new_file='./resources/receiving_address_increment_brother_in_table3.xls')
     XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=increment_list_match_failed,
                                     p_new_file='./resources/receiving_address_increment_match_failed.xls')
-    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=(
-                increment_list_match_success + brother_in_table3_of_increment_list),
+    #
+    increment_list_match_success.extend(brother_in_table3_of_increment_list)
+    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=increment_list_match_success,
                                     p_new_file='./resources/receiving_address_compare.xls')
 
     # 8. 对去重后的数据进行处理并写入excel
