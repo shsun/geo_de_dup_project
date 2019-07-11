@@ -178,7 +178,7 @@ def main(p_args):
             should_create_new_group_4_increment = True
         else:
             tmp_dict['标准地址'] = '匹配成功'
-            tmp_dict['group_id'] = tmp_dict['brother_dict']
+            tmp_dict['group_id'] = brother_dict['brother_dict']
             increment_list_match_success.append(tmp_dict)
             # print('表三中对应的地址信息如下=====>>:')
             # pp = pprint.PrettyPrinter(indent=4)
