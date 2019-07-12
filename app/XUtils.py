@@ -26,6 +26,10 @@ class XUtils(object):
 
     @staticmethod
     def remove_punctuation(text):
+        """删除标点符号
+        :param text:
+        :return:
+        """
         punctuation = '!,;:?"\''
         text = re.sub(r'[{}]+'.format(punctuation), '', text)
         return text.strip().lower()
