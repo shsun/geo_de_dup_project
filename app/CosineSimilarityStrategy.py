@@ -3,6 +3,7 @@
 import numpy as np
 import re
 import warnings
+from app.XUtils import XUtils
 
 
 class CosineSimilarityStrategy(object):
@@ -24,8 +25,11 @@ class CosineSimilarityStrategy(object):
         # s1 = "hi，今天温度是12摄氏度。"
         # s2 = "hello，今天温度很高。"
 
-        s1 = p_address_dict_a['详细地址（拼接省市区）']
-        s2 = p_address_dict_b['详细地址（拼接省市区）']
+        # s1 = p_address_dict_a['详细地址（拼接省市区）']
+        # s2 = p_address_dict_b['详细地址（拼接省市区）']
+
+        s1 = XUtils.remove_noise(p_address_dict_a, '详细地址（拼接省市区）')
+        s2 = XUtils.remove_noise(p_address_dict_b, '详细地址（拼接省市区）')
 
         vec1, vec2 = self.get_word_vector(s1, s2)
         dist1 = self.cos_dist(vec1, vec2)

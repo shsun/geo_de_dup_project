@@ -1,12 +1,34 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-import pprint, sys, os, os.path, xlrd, xlwt
+import pprint, sys, re, os, os.path, xlrd, xlwt
 import json
 import urllib.request
 from urllib import parse
 
 
 class XUtils(object):
+
+    def remove_noise(p_address_dict=None, p_key=None):
+        """ 丢弃噪音数据
+        比如省市县啥的， 就不应该参与比较， 这个没意义
+        :param p_address_dict:
+        :param p_key:
+        :return:
+        """
+        province_name = p_address_dict['省份'] if p_address_dict['省份'] is not None else ''
+        city_name = p_address_dict['城市'] if p_address_dict['城市'] is not None else ''
+        district_name = p_address_dict['区/县'] if p_address_dict['区/县'] is not None else ''
+        town_name = p_address_dict['乡'] if p_address_dict['乡'] is not None else ''
+        # 去除噪音数据(省市县, 空格, 标点符号...)
+        s = str(p_address_dict[p_key]).replace(province_name, '').replace(city_name, '').replace(district_name, '').replace(town_name, '').replace(' ', '')
+        s = XUtils.remove_punctuation(s)
+        return s
+
+    @staticmethod
+    def remove_punctuation(text):
+        punctuation = '!,;:?"\''
+        text = re.sub(r'[{}]+'.format(punctuation), '', text)
+        return text.strip().lower()
 
     @staticmethod
     def process_and_dump_2_excel(p_excel_title=None, p_new_excel_list=None, p_new_file=None):
