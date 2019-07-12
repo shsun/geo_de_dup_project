@@ -1,6 +1,5 @@
 # geo_de_dup_project
 
-## how to install venv https://shsun.github.io/2019/05/06/install_lib_on_venv_4_python/
 
 # 安装依赖
 ```javascript
@@ -41,4 +40,4 @@ PYTHONIOENCODING=utf-8 python3 main.py
 ### doc
 * algorithm.docx 算法文档
 
-### ps w2g49m
+暂时不理会how to install venv https://shsun.github.io/2019/05/06/install_lib_on_venv_4_python/
