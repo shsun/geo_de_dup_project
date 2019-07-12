@@ -16,6 +16,10 @@ class XUtils(object):
         :param p_key:
         :return:
         """
+        #
+        #
+        #
+
         province_name = p_address_dict['省份'] if p_address_dict['省份'] is not None else ''
         city_name = p_address_dict['城市'] if p_address_dict['城市'] is not None else ''
         district_name = p_address_dict['区/县'] if p_address_dict['区/县'] is not None else ''
@@ -137,3 +141,53 @@ class XUtils(object):
             row_index += 1
         book.save(p_write_excel_file_path)
         return True
+
+    @staticmethod
+    def fetch_all_mobiles(p_text=None):
+        """
+        :param p_text: 文本
+        :return: 返回手机号列表
+        """
+        if p_text is None:
+            mobiles = []
+        else:
+            mobiles = re.findall(r"1\d{10}", p_text)
+        return mobiles
+
+    @staticmethod
+    def fetch_all_emails(p_text=None):
+        """
+        :param text: 文本
+        :return: 返回电子邮件列表
+        """
+        if p_text is None:
+            emails = []
+        else:
+            emails = re.findall(r"[a-z0-9\.\-+_]+@[a-z0-9\.\-+_]+\.[a-z]+", p_text)
+        return emails
+
+    @staticmethod
+    def fetch_all_urls(p_text=None):
+        """
+        :param text: 文本
+        :return: 返回url列表
+        """
+        if p_text is None:
+            urls = []
+        else:
+            urls = re.findall(r"(http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*,]|(?:%[0-9a-fA-F][0-9a-fA-F]))+)|([a-zA-Z]+.\w+\.+[a-zA-Z0-9\/_]+)", p_text)
+            urls = list(sum(urls, ()))
+            urls = [x for x in urls if x != '']
+        return urls
+
+    @staticmethod
+    def fetch_all_ips(p_text=None):
+        """
+        :param text: 文本
+        :return: 返回ip列表
+        """
+        if p_text is None:
+            ips = []
+        else:
+            ips = re.findall(r"\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b", p_text)
+        return ips
