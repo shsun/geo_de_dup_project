@@ -24,22 +24,23 @@ class AddressCosineSimilarityStrategy(AbstractStringDiffStrategy):
         :param p_address_dict_b:
         :return:
         """
-        rst = super(AddressCosineSimilarityStrategy, self).compare(p_address_dict_a=p_address_dict_a, p_address_dict_b=p_address_dict_b)
-        if rst is False:
-            # s1 = "hi，今天温度是12摄氏度。"
-            # s2 = "hello，今天温度很高。"
+        # s1 = "hi，今天温度是12摄氏度。"
+        # s2 = "hello，今天温度很高。"
 
-            # s1 = p_address_dict_a['详细地址（拼接省市区）']
-            # s2 = p_address_dict_b['详细地址（拼接省市区）']
+        # s1 = p_address_dict_a['详细地址（拼接省市区）']
+        # s2 = p_address_dict_b['详细地址（拼接省市区）']
 
-            s1 = XUtils.remove_noise(p_address_dict_a, '详细地址（拼接省市区）')
-            s2 = XUtils.remove_noise(p_address_dict_b, '详细地址（拼接省市区）')
+        s1 = XUtils.remove_noise(p_address_dict_a, '详细地址（拼接省市区）')
+        s2 = XUtils.remove_noise(p_address_dict_b, '详细地址（拼接省市区）')
 
-            vec1, vec2 = self.get_word_vector(s1, s2)
-            dist1 = self.cos_dist(vec1, vec2)
+        vec1, vec2 = self.get_word_vector(s1, s2)
+        dist1 = self.cos_dist(vec1, vec2)
 
-            # Note 此处认为相似度达到0.8才是同一个地址， 这个数字可以改
-            rst = dist1 >= AddressCosineSimilarityStrategy.G_80
+        # Note 此处认为相似度达到0.8才是同一个地址， 这个数字可以改
+        rst = dist1 >= AddressCosineSimilarityStrategy.G_80
+
+        if rst is True:
+            rst = super(AddressCosineSimilarityStrategy, self).compare(p_address_dict_a=p_address_dict_a, p_address_dict_b=p_address_dict_b)
 
         return rst
 
