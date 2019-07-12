@@ -1,22 +1,5 @@
 #!/usr/bin/env python
-# -*- encoding: utf-8 -*-
-
-# **************************************************************************************
-# 			                      ______
-# 			                   .-"      "-.
-# 			                  /    OMG     \
-# 			                 |              |
-# 			                 |,  .-.  .-.  ,|
-# 			                 | )(__/  \__)( |
-# 			                 |/     /\     \|
-# 			       (@_       (_     ^^     _)
-# 			  _     ) \_______\__|IIIIII|__/__________________________
-# 			 (_)@8@8{}<________|-\IIIIII/-|___________________________>
-# 			        )_/        \          /
-# 			       (@           `--------`
-#
-# **************************************************************************************
-
+# -*- coding: utf-8 -*-
 import warnings, pprint, sys, os, os.path, xlrd, xlwt
 
 from app.GEODistanceStrategy import GEODistanceStrategy
@@ -25,6 +8,7 @@ from app.LALPctStrategy import LALPctStrategy
 from app.CosineSimilarityStrategy import CosineSimilarityStrategy
 from app.XUtils import XUtils
 
+sys.setdefaultencoding('utf8')
 
 def fetch_max_length_item(p_excel_sub_list=None):
     # '详细地址（拼接省市区）'
