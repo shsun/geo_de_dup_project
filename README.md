@@ -2,9 +2,15 @@
 
 ## how to install venv https://shsun.github.io/2019/05/06/install_lib_on_venv_4_python/
 
+
+# 在命令行上跑(一般在IBM/HP/...服务器上跑)
+```javascript
+PYTHONIOENCODING=utf-8 python3 main.py
+```
+
 ## 目录结构
 
-### main.py
+### main.py 程序入口文件
 
 ### app
 * GEODistanceStrategy.py 计算两个经纬度之间的距离,小于 200 米则认为是同一个地址
