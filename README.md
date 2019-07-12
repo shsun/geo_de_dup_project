@@ -7,7 +7,7 @@ pip3 install -r requirements.txt
 ```
 
 # 在命令行上跑(一般在IBM/HP/...服务器上跑)
-```javascript
+```python
 PYTHONIOENCODING=utf-8 python3 main.py
 ```
 
