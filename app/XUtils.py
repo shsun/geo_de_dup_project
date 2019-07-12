@@ -8,6 +8,7 @@ from urllib import parse
 
 class XUtils(object):
 
+    @staticmethod
     def remove_noise(p_address_dict=None, p_key=None):
         """ 丢弃噪音数据
         比如省市县啥的， 就不应该参与比较， 这个没意义
