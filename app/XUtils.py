@@ -21,7 +21,8 @@ class XUtils(object):
         district_name = p_address_dict['区/县'] if p_address_dict['区/县'] is not None else ''
         town_name = p_address_dict['乡'] if p_address_dict['乡'] is not None else ''
         # 去除噪音数据(省市县, 空格, 标点符号...)
-        s = str(p_address_dict[p_key]).replace(province_name, '').replace(city_name, '').replace(district_name, '').replace(town_name, '').replace(' ', '')
+        s = str(p_address_dict[p_key]).replace(province_name, '').replace(city_name, '').replace(district_name, '').replace(town_name, '')
+        s = XUtils.trim(s)
         s = XUtils.remove_punctuation(s)
         return s
 
@@ -34,6 +35,14 @@ class XUtils(object):
         punctuation = '!,;:?"\''
         text = re.sub(r'[{}]+'.format(punctuation), '', text)
         return text.strip().lower()
+
+    @staticmethod
+    def trim(str):
+        newstr = ''
+        for ch in str:  # 遍历每一个字符串
+            if ch != ' ':
+                newstr = newstr + ch
+        return newstr
 
     @staticmethod
     def process_and_dump_2_excel(p_excel_title=None, p_new_excel_list=None, p_new_file=None):
