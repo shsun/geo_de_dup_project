@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import warnings, pprint, sys, os, os.path, xlrd, xlwt
+import warnings, datetime, pprint, sys, os, os.path, xlrd, xlwt
 
 from app.GEODistanceStrategy import GEODistanceStrategy
 from app.StringDiffStrategy import StringDiffStrategy
@@ -8,7 +8,7 @@ from app.LALPctStrategy import LALPctStrategy
 from app.CosineSimilarityStrategy import CosineSimilarityStrategy
 from app.XUtils import XUtils
 
-#sys.setdefaultencoding('utf8')
+# sys.setdefaultencoding('utf8')
 os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.UTF8'
 
 
@@ -229,5 +229,15 @@ def main(p_args):
 
 if __name__ == '__main__':
     # NOTE 程序入口
+    start = datetime.datetime.now()
+
     warnings.filterwarnings('ignore')
-    sys.exit(main(sys.argv))
+
+    rst = 0
+    rst = main(sys.argv)
+
+    end = datetime.datetime.now()
+    print('\n\n----------------->耗时 cost time<-----------------')
+    print(end - start)
+
+    sys.exit(rst)
