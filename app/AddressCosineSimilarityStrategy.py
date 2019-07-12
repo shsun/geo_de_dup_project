@@ -36,7 +36,7 @@ class AddressCosineSimilarityStrategy(AbstractStringDiffStrategy):
         vec1, vec2 = self.get_word_vector(s1, s2)
         dist1 = self.cos_dist(vec1, vec2)
 
-        # Note 此处认为相似度达到0.8才是同一个地址， 这个数字可以改
+        # Note 看这里 此处认为相似度达到0.8才是同一个地址， 这个数字可以改
         rst = dist1 >= AddressCosineSimilarityStrategy.G_80
 
         if rst is True:

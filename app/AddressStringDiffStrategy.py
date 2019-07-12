@@ -44,7 +44,7 @@ class AddressStringDiffStrategy(AbstractStringDiffStrategy):
                 r2 = AddressStringDiffStrategy.G_100 if with_same_tel_no else r2
         except Exception as e:
             r2 = AddressStringDiffStrategy.G_100
-        # NOTE 看这里
+        # NOTE 看这里 此处认为相似度达到0.8才是同一个地址， 这个数字可以改
         rst = r1 >= AddressStringDiffStrategy.G_80 and r2 >= AddressStringDiffStrategy.G_80
 
         #
