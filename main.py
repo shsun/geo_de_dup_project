@@ -9,6 +9,8 @@ from app.CosineSimilarityStrategy import CosineSimilarityStrategy
 from app.XUtils import XUtils
 
 #sys.setdefaultencoding('utf8')
+os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.UTF8'
+
 
 def fetch_max_length_item(p_excel_sub_list=None):
     # '详细地址（拼接省市区）'
