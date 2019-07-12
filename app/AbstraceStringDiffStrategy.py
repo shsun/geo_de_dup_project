@@ -5,7 +5,7 @@ import difflib
 from app.XUtils import XUtils
 
 
-class StringDiffStrategy(object):
+class AbstractStringDiffStrategy:
     """
     """
 
@@ -24,7 +24,7 @@ class StringDiffStrategy(object):
         :return:详细地址（拼接省市区）匹配度; 详细地址(PROD地址) 匹配度
         """
 
-        rst = False
+        rst = True
         #    excel_title = ['序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度', '标准地址', '标准地址是否新地址']
         # query_str = str(p_address_dict_a['详细地址（拼接省市区）'])
         # s1 = str(p_address_dict_b['详细地址（拼接省市区）'])
@@ -41,31 +41,6 @@ class StringDiffStrategy(object):
         # NOTE 这个要简单去噪音， 就会认为是同一个地址， 实际不是一个地址
         if is_the_same_province is False or is_the_same_city is False or is_the_same_district is False:
             rst = False
-        else:
-            # 详细地址（拼接省市区）匹配度
-            query_str = XUtils.remove_noise(p_address_dict=p_address_dict_a, p_key='详细地址（拼接省市区）')
-            s1 = XUtils.remove_noise(p_address_dict=p_address_dict_b, p_key='详细地址（拼接省市区）')
-            r1 = difflib.SequenceMatcher(None, query_str, s1).quick_ratio()
-            # Note 如果分数介于60~80分, 则再给一次机会, 如果具有相同手机号码，则认为是同一个地址
-            if r1 < StringDiffStrategy.G_80 and r1 >= StringDiffStrategy.G_60:
-                with_same_tel_no = self.has_the_same_tel_no(p_address_dict_a=p_address_dict_a, p_address_dict_b=p_address_dict_b, p_key='详细地址（拼接省市区）')
-                r1 = StringDiffStrategy.G_100 if with_same_tel_no else r1
-
-            # 详细地址(PROD地址) 匹配度
-            try:
-                # query_str = p_address_dict_a['详细地址(PROD地址)']
-                # s1 = p_address_dict_b['详细地址(PROD地址)']
-                query_str = XUtils.remove_noise(p_address_dict=p_address_dict_a, p_key='详细地址(PROD地址)')
-                s1 = XUtils.remove_noise(p_address_dict=p_address_dict_b, p_key='详细地址(PROD地址)')
-                r2 = difflib.SequenceMatcher(None, query_str, s1).quick_ratio()
-                # Note 如果分数介于60~80分, 则再给一次机会, 如果具有相同手机号码，则认为是同一个地址
-                if r2 < StringDiffStrategy.G_80 and r2 >= StringDiffStrategy.G_60:
-                    with_same_tel_no = self.has_the_same_tel_no(p_address_dict_a=p_address_dict_a, p_address_dict_b=p_address_dict_b, p_key='详细地址(PROD地址)')
-                    r2 = StringDiffStrategy.G_100 if with_same_tel_no else r2
-            except Exception as e:
-                r2 = StringDiffStrategy.G_100
-            # NOTE 看这里
-            r1 >= StringDiffStrategy.G_80 and r2 >= StringDiffStrategy.G_80
 
         return rst
 

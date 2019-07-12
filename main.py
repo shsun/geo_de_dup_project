@@ -3,9 +3,9 @@
 import warnings, datetime, pprint, sys, os, os.path, xlrd, xlwt
 
 from app.GEODistanceStrategy import GEODistanceStrategy
-from app.StringDiffStrategy import StringDiffStrategy
+from app.AddressStringDiffStrategy import AddressStringDiffStrategy
 from app.LALPctStrategy import LALPctStrategy
-from app.CosineSimilarityStrategy import CosineSimilarityStrategy
+from app.AddressCosineSimilarityStrategy import AddressCosineSimilarityStrategy
 from app.XUtils import XUtils
 
 # sys.setdefaultencoding('utf8')
@@ -44,7 +44,7 @@ def contains(p_new_excel_list=None, p_old_dict=None):
 
         # Note 计算字符匹配度
         # 详细地址（拼接省市区）匹配度; 详细地址(PROD地址) 匹配度
-        rst_str_diff = StringDiffStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
+        rst_str_diff = AddressStringDiffStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
 
         # Note 利用余弦相似度公式计算两字符串的相似性 (相似度达到0.8则认为是一个地址，否则是2个不同地址, 这个0.8我是随便写的, 可修改)
         # rst_cos_sim = CosineSimilarityStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)

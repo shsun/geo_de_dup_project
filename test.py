@@ -9,7 +9,7 @@ import re
 
 import re
 
-from app.StringDiffStrategy import StringDiffStrategy
+from app.AddressStringDiffStrategy import AddressStringDiffStrategy
 
 # 自定义获取文本手机号函数
 def get_findAll_mobiles(text):
@@ -27,6 +27,6 @@ if __name__ == '__main__':
 
     print(m)
 
-    StringDiffStrategy().compare()
+    AddressStringDiffStrategy().compare()
 
     sys.exit(0)
