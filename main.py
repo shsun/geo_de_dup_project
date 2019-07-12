@@ -8,7 +8,7 @@ from app.LALPctStrategy import LALPctStrategy
 from app.CosineSimilarityStrategy import CosineSimilarityStrategy
 from app.XUtils import XUtils
 
-sys.setdefaultencoding('utf8')
+#sys.setdefaultencoding('utf8')
 
 def fetch_max_length_item(p_excel_sub_list=None):
     # '详细地址（拼接省市区）'
