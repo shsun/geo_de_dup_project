@@ -8,9 +8,10 @@ from app.XUtils import XUtils
 class AbstractStringDiffStrategy:
     """
     """
-
-    G_80 = 0.8
     G_60 = 0.6
+    G_70 = 0.7
+    G_80 = 0.8
+    G_90 = 0.9
     G_100 = 1.0
 
     def __init__(self):
