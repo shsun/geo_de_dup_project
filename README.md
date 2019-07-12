@@ -2,6 +2,10 @@
 
 ## how to install venv https://shsun.github.io/2019/05/06/install_lib_on_venv_4_python/
 
+# 安装依赖
+```javascript
+pip3 install -r requirements.txt
+```
 
 # 在命令行上跑(一般在IBM/HP/...服务器上跑)
 ```javascript
