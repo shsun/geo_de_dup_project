@@ -47,7 +47,7 @@ def contains(p_new_excel_list=None, p_old_dict=None):
 
         # Note 计算字符匹配度
         # 详细地址（拼接省市区）匹配度; 详细地址(PROD地址) 匹配度
-        rst_str_diff = AddressStringDiffStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
+        rst_str_diff, sim_string = AddressStringDiffStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
 
         # Note 看这里 ................................... 加权系数, 可以调. 因为字符串匹配更优, 所以权重大一些, 此处需要人工去调
         FACTOR = 0.84
@@ -57,7 +57,7 @@ def contains(p_new_excel_list=None, p_old_dict=None):
         b = (1000 - x) / 1000
 
         # a是字符串相似度, b是距离相似度
-        a = rst_str_diff
+        a = sim_string
         sim = FACTOR * a + (1 - FACTOR) * b
 
         # rst = match_distance is True and rst_str_diff is True

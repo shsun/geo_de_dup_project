@@ -51,4 +51,4 @@ class AddressStringDiffStrategy(AbstractStringDiffStrategy):
         if rst is True:
             rst = super(AddressStringDiffStrategy, self).compare(p_address_dict_a=p_address_dict_a, p_address_dict_b=p_address_dict_b)
 
-        return rst
+        return rst, r1
