@@ -36,21 +36,33 @@ def contains(p_new_excel_list=None, p_old_dict=None):
     brother_dict = None
     for tmp_new_dict in p_new_excel_list:
 
+        # Note 利用余弦相似度公式计算两字符串的相似性 (相似度达到0.8则认为是一个地址，否则是2个不同地址, 这个0.8我是随便写的, 可修改)
+        # rst_cos_sim = CosineSimilarityStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
+
         # NOTE 通过对经纬度的比较，相差百分之一或更小以内的视为同一地址，否则视为两个地址
         # rst_lal = LALPctStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
 
         # Note 根据距离来判断(200米)
-        #rst_distance = GEODistanceStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
+        match_distance, real_distance = GEODistanceStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
 
         # Note 计算字符匹配度
         # 详细地址（拼接省市区）匹配度; 详细地址(PROD地址) 匹配度
         rst_str_diff = AddressStringDiffStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
 
-        # Note 利用余弦相似度公式计算两字符串的相似性 (相似度达到0.8则认为是一个地址，否则是2个不同地址, 这个0.8我是随便写的, 可修改)
-        # rst_cos_sim = CosineSimilarityStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
+        # Note 看这里 ................................... 加权系数, 可以调. 因为字符串匹配更优, 所以权重大一些, 此处需要人工去调
+        FACTOR = 0.84
 
-        # rst = rst_distance is True and rst_str_diff is True
-        rst = rst_str_diff is True
+        # 计算根据距离算出来的相似度. 其中x是求大圆算出来的距离， 即2个点的真实距离
+        x = real_distance
+        b = (1000 - x) / 1000
+
+        # a是字符串相似度, b是距离相似度
+        a = rst_str_diff
+        sim = FACTOR * a + (1 - FACTOR) * b
+
+        # rst = match_distance is True and rst_str_diff is True
+        # NOTE 看这里  ...................... 此处也需要人为调整
+        rst = sim >= 0.8
 
         if rst is True:
             brother_dict = tmp_new_dict

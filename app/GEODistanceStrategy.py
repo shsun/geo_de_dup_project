@@ -38,8 +38,9 @@ class GEODistanceStrategy(object):
         :return:
         """
 
-
         s = self._getDistance(p_address_dict_a['纬度'], p_address_dict_a['经度'], p_address_dict_b['纬度'],
                               p_address_dict_b['经度'])
-        rst = s * 1000 <= 200
-        return rst
+        # 两点之间的真实距离(单位为米)
+        real_distance = s * 1000
+        rst = real_distance <= 200
+        return rst, real_distance
