@@ -33,6 +33,10 @@ class AddressCosineSimilarityStrategy(AbstractStringDiffStrategy):
         s1 = XUtils.remove_noise(p_address_dict_a, '详细地址（拼接省市区）')
         s2 = XUtils.remove_noise(p_address_dict_b, '详细地址（拼接省市区）')
 
+        # 例如有的地址叫国储八三二，有的地址叫国储832, 统一处理为国储832, 以提升匹配度
+        s1 = XUtils.convert_chinese_numerals_2_arabic_numerals(p_str=s1)
+        s2 = XUtils.convert_chinese_numerals_2_arabic_numerals(p_str=s2)
+
         vec1, vec2 = self.get_word_vector(s1, s2)
         dist1 = self.cos_dist(vec1, vec2)
 

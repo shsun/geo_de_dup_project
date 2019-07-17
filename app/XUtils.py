@@ -7,6 +7,22 @@ from urllib import parse
 
 
 class XUtils(object):
+    G_DIGIT_DICT = {'零': 0, '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9}
+
+    @staticmethod
+    def convert_chinese_numerals_2_arabic_numerals(p_str=None):
+        """ 将汉字数字转换为阿拉伯数字
+
+        :param p_str:
+        :return:
+        """
+        result = ''
+        for i in range(0, len(p_str)):
+            tmp_char = p_str[i]
+            if tmp_char in XUtils.G_DIGIT_DICT.keys():
+                tmp_char = XUtils.G_DIGIT_DICT[tmp_char]
+            result = result + str(tmp_char)
+        return result
 
     @staticmethod
     def remove_noise(p_address_dict=None, p_key=None):
