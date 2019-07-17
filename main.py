@@ -50,11 +50,11 @@ def contains(p_new_excel_list=None, p_old_dict=None):
         rst_str_diff, sim_string = AddressStringDiffStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
 
         # Note 看这里 ................................... 加权系数, 可以调. 因为字符串匹配更优, 所以权重大一些, 此处需要人工去调
-        FACTOR = 0.84
+        FACTOR = 0.75
 
         # 计算根据距离算出来的相似度. 其中x是求大圆算出来的距离， 即2个点的真实距离
         x = real_distance
-        b = (1000 - x) / 1000
+        b = (500 - x) / 500
 
         # a是字符串相似度, b是距离相似度
         a = sim_string
@@ -62,7 +62,7 @@ def contains(p_new_excel_list=None, p_old_dict=None):
 
         # rst = match_distance is True and rst_str_diff is True
         # NOTE 看这里  ...................... 此处也需要人为调整
-        rst = sim >= 0.8
+        rst = sim >= 0.6
 
         if rst is True:
             brother_dict = tmp_new_dict
