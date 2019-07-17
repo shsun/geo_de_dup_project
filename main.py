@@ -71,6 +71,8 @@ def contains(p_new_excel_list=None, p_old_dict=None):
 
 
 def main(p_args):
+    start = datetime.datetime.now()
+
     excel_title = ['序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度', '标准地址', '标准地址是否新地址']
 
     # 1. 读取地址信息 NOTE 看这里
@@ -149,6 +151,11 @@ def main(p_args):
     sorted_list = sorted(new_excel_list_filtered, key=lambda x: x['group_id'], reverse=False)
     XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
                                     p_new_file='./resources/receiving_address_filtered_1.xls')
+
+    end = datetime.datetime.now()
+    print('\n\n----------------->存量耗时 cost time<-----------------')
+    print(end - start)
+    start = datetime.datetime.now()
 
     # 7. 读取增量excel(实际excel中就一条) 至 old_excel_list 中
     excel_title.remove('group_id')
@@ -235,21 +242,18 @@ def main(p_args):
         XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
                                         p_new_file='./resources/receiving_address_filtered_2.xls')
 
+    end = datetime.datetime.now()
+    print('\n\n----------------->增量耗时 cost time<-----------------')
+    print(end - start)
+
     print('\n程序执行完毕 !!! DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE')
     return 0
 
 
 if __name__ == '__main__':
     # NOTE 程序入口
-    start = datetime.datetime.now()
-
     warnings.filterwarnings('ignore')
 
-    rst = 0
     rst = main(sys.argv)
-
-    end = datetime.datetime.now()
-    print('\n\n----------------->耗时 cost time<-----------------')
-    print(end - start)
 
     sys.exit(rst)
