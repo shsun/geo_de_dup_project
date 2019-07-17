@@ -14,7 +14,7 @@ from app.XUtils import XUtils
 def main(p_args):
     # Note 看这里 如果想做50个增量， 就把这个100改成50
     try:
-        G_INCREMENT_SIZE = p_args[1]
+        G_INCREMENT_SIZE = int(p_args[1])
     except Exception as e:
         G_INCREMENT_SIZE = 8
     print('\n\n样本数为========>>%d, 如果您没有通过命令行去传递这个数字，则程序默认为8个样本\n' % (G_INCREMENT_SIZE))
