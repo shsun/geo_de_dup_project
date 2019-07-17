@@ -23,30 +23,38 @@ class AddressStringDiffStrategy(AbstractStringDiffStrategy):
         :return:详细地址（拼接省市区）匹配度; 详细地址(PROD地址) 匹配度
         """
         # 详细地址（拼接省市区）匹配度
-        query_str = XUtils.remove_noise(p_address_dict=p_address_dict_a, p_key='详细地址（拼接省市区）')
-        s1 = XUtils.remove_noise(p_address_dict=p_address_dict_b, p_key='详细地址（拼接省市区）')
+        P_KEY = '详细地址（拼接省市区）'
+        query_str = XUtils.remove_noise(p_address_dict=p_address_dict_a, p_key=P_KEY)
+        s1 = XUtils.remove_noise(p_address_dict=p_address_dict_b, p_key=P_KEY)
         # 例如有的地址叫国储八三二，有的地址叫国储832, 统一处理为国储832, 以提升匹配度
         query_str = XUtils.convert_chinese_numerals_2_arabic_numerals(p_str=query_str)
         s1 = XUtils.convert_chinese_numerals_2_arabic_numerals(p_str=s1)
         r1 = difflib.SequenceMatcher(None, query_str, s1).quick_ratio()
+
+        # 修改原始数据，丢弃掉空格，特殊字符串
+        p_address_dict_a[P_KEY] = XUtils.remove_empty_and_punctuation(p_address_dict=p_address_dict_a, p_key=P_KEY)
+        p_address_dict_b[P_KEY] = XUtils.remove_empty_and_punctuation(p_address_dict=p_address_dict_b, p_key=P_KEY)
+
         # Note 如果分数介于60~80分, 则再给一次机会, 如果具有相同手机号码，则认为是同一个地址
         if r1 < AddressStringDiffStrategy.G_80 and r1 >= AddressStringDiffStrategy.G_60:
-            with_same_tel_no = self.has_the_same_tel_no(p_address_dict_a=p_address_dict_a, p_address_dict_b=p_address_dict_b, p_key='详细地址（拼接省市区）')
+            with_same_tel_no = self.has_the_same_tel_no(p_address_dict_a=p_address_dict_a, p_address_dict_b=p_address_dict_b, p_key=P_KEY)
             r1 = AddressStringDiffStrategy.G_100 if with_same_tel_no else r1
 
         # 详细地址(PROD地址) 匹配度
         try:
-            # query_str = p_address_dict_a['详细地址(PROD地址)']
-            # s1 = p_address_dict_b['详细地址(PROD地址)']
-            query_str = XUtils.remove_noise(p_address_dict=p_address_dict_a, p_key='详细地址(PROD地址)')
-            s1 = XUtils.remove_noise(p_address_dict=p_address_dict_b, p_key='详细地址(PROD地址)')
+            P_KEY = '详细地址(PROD地址)'
+            query_str = XUtils.remove_noise(p_address_dict=p_address_dict_a, p_key=P_KEY)
+            s1 = XUtils.remove_noise(p_address_dict=p_address_dict_b, p_key=P_KEY)
             # 例如有的地址叫国储八三二，有的地址叫国储832, 统一处理为国储832, 以提升匹配度
             query_str = XUtils.convert_chinese_numerals_2_arabic_numerals(p_str=query_str)
             s1 = XUtils.convert_chinese_numerals_2_arabic_numerals(p_str=s1)
+            # 修改原始数据，丢弃掉空格，特殊字符串
+            p_address_dict_a[P_KEY] = XUtils.remove_empty_and_punctuation(p_address_dict=p_address_dict_a, p_key=P_KEY)
+            p_address_dict_b[P_KEY] = XUtils.remove_empty_and_punctuation(p_address_dict=p_address_dict_b, p_key=P_KEY)
             r2 = difflib.SequenceMatcher(None, query_str, s1).quick_ratio()
             # Note 如果分数介于60~80分, 则再给一次机会, 如果具有相同手机号码，则认为是同一个地址
             if r2 < AddressStringDiffStrategy.G_80 and r2 >= AddressStringDiffStrategy.G_60:
-                with_same_tel_no = self.has_the_same_tel_no(p_address_dict_a=p_address_dict_a, p_address_dict_b=p_address_dict_b, p_key='详细地址(PROD地址)')
+                with_same_tel_no = self.has_the_same_tel_no(p_address_dict_a=p_address_dict_a, p_address_dict_b=p_address_dict_b, p_key=P_KEY)
                 r2 = AddressStringDiffStrategy.G_100 if with_same_tel_no else r2
         except Exception as e:
             r2 = AddressStringDiffStrategy.G_100

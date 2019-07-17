@@ -8,7 +8,17 @@ pip3 install -r requirements.txt
 
 # 在命令行上跑(一般在IBM/HP/...服务器上跑)
 ```python
-PYTHONIOENCODING=utf-8 python3 main.py
+# N为样本数, 会随机抽取N个样本作为增量数据
+PYTHONIOENCODING=utf-8 python3 main_split.py N
+# 例如
+# PYTHONIOENCODING=utf-8 python3 main_split.py 10
+
+
+# 存量
+PYTHONIOENCODING=utf-8 python3 main1.py
+
+# 增量
+PYTHONIOENCODING=utf-8 python3 main2.py
 ```
 
 # 目录结构

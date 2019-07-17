@@ -32,16 +32,25 @@ class XUtils(object):
         :param p_key:
         :return:
         """
-        #
-        #
-        #
-
         province_name = p_address_dict['省份'] if p_address_dict['省份'] is not None else ''
         city_name = p_address_dict['城市'] if p_address_dict['城市'] is not None else ''
         district_name = p_address_dict['区/县'] if p_address_dict['区/县'] is not None else ''
         town_name = p_address_dict['乡'] if p_address_dict['乡'] is not None else ''
         # 去除噪音数据(省市县, 空格, 标点符号...)
-        s = str(p_address_dict[p_key]).replace(province_name, '').replace(city_name, '').replace(district_name, '').replace(town_name, '')
+        s = XUtils.remove_empty_and_punctuation(p_address_dict=p_address_dict, p_key=p_key)
+        s = s.replace(province_name, '').replace(city_name, '').replace(district_name, '').replace(town_name, '')
+        return s
+
+    @staticmethod
+    def remove_empty_and_punctuation(p_address_dict=None, p_key=None):
+        """ 丢弃噪音数据
+        :param p_address_dict:
+        :param p_key:
+        :return:
+        """
+        #
+        # 去除噪音数据(空格, 标点符号...)
+        s = str(p_address_dict[p_key])
         s = XUtils.trim(s)
         s = XUtils.remove_punctuation(s)
         return s
