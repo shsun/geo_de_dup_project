@@ -13,11 +13,9 @@ from app.XUtils import XUtils
 
 def main(p_args):
     # Note 看这里 如果想做50个增量， 就把这个100改成50
-    try:
-        G_INCREMENT_SIZE = int(p_args[1])
-    except Exception as e:
-        G_INCREMENT_SIZE = 8
-    print('\n\n样本数为========>>%d, 如果您没有通过命令行去传递这个数字，则程序默认为8个样本\n' % (G_INCREMENT_SIZE))
+    G_INCREMENT_SIZE = input('请输入样本数(必须是正整数):')
+
+    print('\n\n样本数为========>>%d\n' % (G_INCREMENT_SIZE))
 
     excel_title = ['序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度', '标准地址', '标准地址是否新地址']
 
