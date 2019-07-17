@@ -29,13 +29,13 @@ def main(p_args):
     new_excel_list_grouped = XUtils.excel_to_list(p_read_excel_file_path=EXCEL_TABLE1,
                                                   p_sheet_name='Sheet1',
                                                   p_excel_title_list=excel_title)
-    # 分组, 将同一组的元素放到一个list内, 形成一个dict, 该dict的key为group_id_value
+    # 分组, 将同一组的元素放到一个sub-list内, 形成一个dict, 该dict的key为group_id_value
     for tmp_dict in new_excel_list_grouped:
         group_id_value = tmp_dict['group_id']
         if group_id_value not in new_excel_dict_grouped.keys():
             new_excel_dict_grouped[group_id_value] = []
         new_excel_dict_grouped[group_id_value].append(tmp_dict)
-    
+
     # 存量表3，该表示由main1.py生成的， 此步主要是希望算出最大的group_id(即有多少个group)
     EXCEL_TABLE1 = './resources/receiving_address_filtered_1.xls'
     old_excel_list = XUtils.excel_to_list(p_read_excel_file_path=EXCEL_TABLE1,
