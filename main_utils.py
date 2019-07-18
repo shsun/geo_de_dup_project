@@ -7,6 +7,7 @@ from app.AddressStringDiffStrategy import AddressStringDiffStrategy
 from app.LALPctStrategy import LALPctStrategy
 from app.AddressCosineSimilarityStrategy import AddressCosineSimilarityStrategy
 from app.XUtils import XUtils
+from app.XConstants import XConstants
 
 # sys.setdefaultencoding('utf8')
 os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.UTF8'
@@ -58,14 +59,10 @@ def contains(p_new_excel_list=None, p_old_dict=None):
         # a是字符串相似度, b是距离相似度
         a = sim_string
 
-        # Note 看这里 ................................... ALPHA、BETA系数, 可以调. 因为字符串匹配更优, 所以权重大一些, 此处需要人工去调
-        ALPHA = 0.75
-        BETA = 0.6
-
         # 首先判断，已有地址的这一条数据有没有经纬度
         # 如果有
         #       计算距离X
-        #       再计算b =（500 - X） / 500
+        #       再计算b =（500 - X） / 500, Note 此处的500也作为一个参数，允许调整，见XConstants.FIXED_DISTANCE
         #       这里加上一个b的下限
         #       b下限 =（β - a理论 * α） / （1 - α）
         #       如果b小于这个值
@@ -76,16 +73,16 @@ def contains(p_new_excel_list=None, p_old_dict=None):
         #       b = 0
         if XUtils.has_valid_lat_lng(p_old_dict):
             # 计算根据距离算出来的相似度. 其中x是求大圆算出来的距离， 即2个点的真实距离
-            b = (500 - x) / 500
+            b = (XConstants.FIXED_DISTANCE - x) / XConstants.FIXED_DISTANCE
             # b还影响匹配度， 但是影响程度非常低
-            B_MIN = (BETA - a * ALPHA) / (1 - ALPHA)
+            B_MIN = (XConstants.BETA - a * XConstants.ALPHA) / (1 - XConstants.ALPHA)
             if b < B_MIN:
                 b = B_MIN
         else:
             b = 0
 
         #
-        sim = ALPHA * a + (1 - ALPHA) * b
+        sim = XConstants.ALPHA * a + (1 - XConstants.ALPHA) * b
 
         # rst = match_distance is True and rst_str_diff is True
         # NOTE 看这里  ...................... 此处也需要人为调整
