@@ -13,7 +13,7 @@ from app.XUtils import XUtils
 
 def main(p_args):
     # Note 看这里 如果想做50个增量， 就把这个100改成50
-    G_INCREMENT_SIZE = input('请输入样本数(必须是正整数):')
+    G_INCREMENT_SIZE = int(input('请输入样本数(必须是正整数):'))
 
     print('\n\n样本数为========>>%d\n' % (G_INCREMENT_SIZE))
 
