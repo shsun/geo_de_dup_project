@@ -52,7 +52,9 @@ def main(p_args):
     increment_list_match_failed = []
     should_create_new_group_4_increment = False
     excel_title.insert(0, 'group_id')
+    i = 0
     for tmp_dict in old_excel_list:
+        i += 1
         rst, brother_dict, sim = contains(p_new_excel_list=new_excel_list_grouped, p_old_dict=tmp_dict)
         tmp_dict['sim'] = sim
         if rst is False:
@@ -75,17 +77,21 @@ def main(p_args):
             increment_list_match_success.append(tmp_dict)
             pass
 
-    #
-    excel_title.insert(0, 'sim')
-    sorted_list = sorted(new_excel_list_grouped, key=lambda x: x['sim'], reverse=True)
-    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
-                                    p_new_file='./resources/table_4.xls')
+        for tmp_new_dict in new_excel_list_grouped:
+            if 'sim' not in tmp_new_dict.keys():
+                aa = 1
+                pass
 
-    top_10 = sorted_list[:9]
-    sorted_list = sorted(top_10, key=lambda x: x['sim'], reverse=True)
-    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
-                                    p_new_file='./resources/table_5.xls')
-    excel_title.remove('sim')
+        excel_title.insert(0, 'sim')
+        sorted_list = sorted(new_excel_list_grouped, key=lambda x: x['sim'], reverse=True)
+        XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
+                                        p_new_file='./resources/table_%d_4.xls' % (i))
+        top_10 = sorted_list[:9]
+        sorted_list = sorted(top_10, key=lambda x: x['sim'], reverse=True)
+        sorted_list.insert(0, tmp_dict)
+        XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
+                                        p_new_file='./resources/table_%d_5.xls' % (i))
+        excel_title.remove('sim')
 
     new_excel_list_filtered = []
     new_excel_dict_filtered = {}

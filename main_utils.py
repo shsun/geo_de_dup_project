@@ -33,11 +33,11 @@ def contains(p_new_excel_list=None, p_old_dict=None):
     :return: rst为true的时候表示能够在p_new_excel_list找到兄弟节点， 否则找不到兄弟节点。 (所谓兄弟节点就是指着这2个点认为是同一个地址), brother_dict是p_old_dict的兄弟节点.
     """
     rst = False
-    brother_dict = None
+    brother_dict = {'sim': -3721.4728}
     sim = 0
 
+    # 竟然没有SIM ？？？？？？？？？？？？？？
     for tmp_new_dict in p_new_excel_list:
-
         # Note 利用余弦相似度公式计算两字符串的相似性 (相似度达到0.8则认为是一个地址，否则是2个不同地址, 这个0.8我是随便写的, 可修改)
         # rst_cos_sim = CosineSimilarityStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
 
@@ -46,7 +46,7 @@ def contains(p_new_excel_list=None, p_old_dict=None):
 
         # Note 根据距离来判断(200米)
         match_distance, real_distance = GEODistanceStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
-        #real_distance = random.randint(0, 5000000)
+        # real_distance = random.randint(0, 5000000)
 
         # Note 计算字符匹配度
         # 详细地址（拼接省市区）匹配度; 详细地址(PROD地址) 匹配度
@@ -74,7 +74,9 @@ def contains(p_new_excel_list=None, p_old_dict=None):
 
         tmp_new_dict['sim'] = sim
 
+        # Note 取得sim 最大的作为兄弟返回
         if rst is True:
-            brother_dict = tmp_new_dict
-            break
-    return rst, brother_dict, sim
+            if brother_dict is None or tmp_new_dict['sim'] > brother_dict['sim']:
+                brother_dict = tmp_new_dict
+
+    return rst, brother_dict, brother_dict['sim']
