@@ -33,8 +33,8 @@ def contains(p_new_excel_list=None, p_old_dict=None):
     :return: rst为true的时候表示能够在p_new_excel_list找到兄弟节点， 否则找不到兄弟节点。 (所谓兄弟节点就是指着这2个点认为是同一个地址), brother_dict是p_old_dict的兄弟节点.
     """
     rst = False
-    brother_dict = {'sim': -3721.4728}
-    sim = 0
+    max_sim = -3721.4728
+    brother_dict = None
 
     # 竟然没有SIM ？？？？？？？？？？？？？？
     for tmp_new_dict in p_new_excel_list:
@@ -78,5 +78,6 @@ def contains(p_new_excel_list=None, p_old_dict=None):
         if rst is True:
             if brother_dict is None or tmp_new_dict['sim'] > brother_dict['sim']:
                 brother_dict = tmp_new_dict
+                max_sim = brother_dict = brother_dict['sim']
 
-    return rst, brother_dict, brother_dict['sim']
+    return rst, brother_dict, max_sim
