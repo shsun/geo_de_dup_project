@@ -78,6 +78,6 @@ def contains(p_new_excel_list=None, p_old_dict=None):
         if rst is True:
             if brother_dict is None or tmp_new_dict['sim'] > brother_dict['sim']:
                 brother_dict = tmp_new_dict
-                max_sim = brother_dict = brother_dict['sim']
+                max_sim = brother_dict['sim']
 
     return rst, brother_dict, max_sim
