@@ -28,11 +28,9 @@ def main(p_args):
     err_num = 0
     tmp_old_excel_list = []
     for tmp_dict in old_excel_list:
-        try:
-            a = 1.0 / tmp_dict['经度']
-            a = 1.0 / tmp_dict['纬度']
+        if XUtils.has_valid_lat_lng(tmp_dict):
             tmp_old_excel_list.append(tmp_dict)
-        except Exception as e:
+        else:
             err_num += 1
     old_excel_list = tmp_old_excel_list
     print('\n经纬度数据有问题的数据条数  invalid data num======>>%d' % (err_num))

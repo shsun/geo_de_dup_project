@@ -9,6 +9,21 @@ from urllib import parse
 class XUtils(object):
     G_DIGIT_DICT = {'零': 0, '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9}
 
+    @staticmethod
+    def has_valid_lat_lng(p_address_dict=None):
+        """
+
+        :param p_address_dict:
+        :return:
+        """
+        rst = False
+        try:
+            a = 1.0 / p_address_dict['经度']
+            a = 1.0 / p_address_dict['纬度']
+            rst = True
+        except Exception as e:
+            rst = False
+        return rst
 
     @staticmethod
     def convert_chinese_numerals_2_arabic_numerals_for_dict(p_address_dict=None, p_key=None):
