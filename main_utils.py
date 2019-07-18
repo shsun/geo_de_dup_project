@@ -60,7 +60,7 @@ def contains(p_new_excel_list=None, p_old_dict=None):
 
         # Note 看这里 ................................... ALPHA、BETA系数, 可以调. 因为字符串匹配更优, 所以权重大一些, 此处需要人工去调
         ALPHA = 0.75
-        BETA = 1.0
+        BETA = 0.6
 
         # 首先判断，已有地址的这一条数据有没有经纬度
         # 如果有
