@@ -2,12 +2,7 @@
 # -*- coding: utf-8 -*-
 import warnings, datetime, pprint, sys, os, os.path, xlrd, xlwt
 
-from app.GEODistanceStrategy import GEODistanceStrategy
-from app.AddressStringDiffStrategy import AddressStringDiffStrategy
-from app.LALPctStrategy import LALPctStrategy
-from app.AddressCosineSimilarityStrategy import AddressCosineSimilarityStrategy
 from app.XUtils import XUtils
-
 from main_utils import fetch_max_length_item, contains
 
 # sys.setdefaultencoding('utf8')

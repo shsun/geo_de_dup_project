@@ -1,13 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import warnings, datetime, pprint, sys, os, os.path, xlrd, xlwt
-
-from app.GEODistanceStrategy import GEODistanceStrategy
-from app.AddressStringDiffStrategy import AddressStringDiffStrategy
-from app.LALPctStrategy import LALPctStrategy
-from app.AddressCosineSimilarityStrategy import AddressCosineSimilarityStrategy
+import warnings, datetime, time, pprint, sys, os, os.path, xlrd, xlwt
 from app.XUtils import XUtils
-
 from main_utils import fetch_max_length_item, contains
 
 # sys.setdefaultencoding('utf8')
@@ -18,7 +12,15 @@ os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.UTF8'
 """
 
 
+
 def main(p_args):
+    global g_contains_execute_times
+    global g_contains_cost_time
+
+    g_contains_execute_times = 0
+    g_contains_cost_time = 0
+
+
     start = datetime.datetime.now()
 
     excel_title = ['序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度', '标准地址', '标准地址是否新地址']
@@ -55,7 +57,14 @@ def main(p_args):
     new_excel_list_grouped = []
     group_id = 0
     for tmp_dict in old_excel_list:
+
+        time_start = time.time()
         rst, brother_dict = contains(p_new_excel_list=new_excel_list_grouped, p_old_dict=tmp_dict)
+        time_end = time.time()
+
+        g_contains_execute_times += 1
+        g_contains_cost_time += (time_end-time_start)
+
         if rst is False:
             group_id += 1
             # 建立小组
@@ -100,102 +109,16 @@ def main(p_args):
     XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
                                     p_new_file='./resources/receiving_address_filtered_1.xls')
 
-    # NOTE ============================================================================================================
-    # NOTE 下面是增量
-    # NOTE ============================================================================================================
-    end = datetime.datetime.now()
-    print('\n\n----------------->存量耗时 cost time<-----------------')
-    print(end - start)
-    start = datetime.datetime.now()
+    print('\n\n----------------->g_contains_cost_time<-----------------')
+    print(g_contains_execute_times)
+    print(g_contains_cost_time)
+    print(g_contains_cost_time/g_contains_execute_times)
 
-    # 7. 读取增量excel(实际excel中就一条) 至 old_excel_list 中
-    excel_title.remove('group_id')
-    # NOTE 看过来
-    # EXCEL_TABLE_INCREMENT = './resources/receiving_address_increment_1.xlsx'
-    EXCEL_TABLE_INCREMENT = './resources/receiving_address_increment_1_ok.xls'
-    old_excel_list = XUtils.excel_to_list(p_read_excel_file_path=EXCEL_TABLE_INCREMENT,
-                                          p_sheet_name='Sheet1',
-                                          p_excel_title_list=excel_title)
-    print('\n增量数据条数 old_excel_list length=====>>%d\n' % (len(old_excel_list)))
-    increment_list_match_success = []
-    brother_in_table3_of_increment_list = []
-    increment_list_match_failed = []
-    should_create_new_group_4_increment = False
-    excel_title.insert(0, 'group_id')
-    for tmp_dict in old_excel_list:
-        rst, brother_dict = contains(p_new_excel_list=new_excel_list_grouped, p_old_dict=tmp_dict)
-        if rst is False:
-            tmp_dict['标准地址'] = '匹配失败'
-
-            group_id += 1
-            tmp_dict['group_id'] = group_id
-
-            # 需要进表2的数据
-            new_excel_list_grouped.append(tmp_dict)
-            # 建立小组
-            new_excel_dict_grouped[str(group_id)] = []
-            new_excel_dict_grouped[str(tmp_dict['group_id'])].append(tmp_dict)
-            #
-            increment_list_match_failed.append(tmp_dict)
-            should_create_new_group_4_increment = True
-        else:
-            tmp_dict['标准地址'] = '匹配成功'
-            tmp_dict['group_id'] = brother_dict['group_id']
-            increment_list_match_success.append(tmp_dict)
-            pass
-
-    new_excel_list_filtered = []
-    new_excel_dict_filtered = {}
-    # Note 注意， 这个value是一个list
-    for (key, value) in new_excel_dict_grouped.items():
-        rst = fetch_max_length_item(p_excel_sub_list=value)
-        new_excel_list_filtered.append(rst)
-        new_excel_dict_filtered[rst['group_id']] = rst
-
-    #
-    for tmp_dict in increment_list_match_success:
-        brother_in_table3 = new_excel_dict_filtered[tmp_dict['group_id']]
-        brother_in_table3['标准地址是否新地址'] = '我是存量'
-        # print('表三中对应的地址信息如下=====>>:')
-        # pp = pprint.PrettyPrinter(indent=4)
-        # pp.pprint(brother_in_table3)
-        brother_in_table3_of_increment_list.append(brother_in_table3)
-
-    # TODO 最后100条测试数据，匹配成功的，看看能否将数据输出成Excel，就是，前几列信息匹配成功的增量数据，然后后几列是匹配到的表三数据
-    print('\n增量匹配成功的数据条数 increment_list_match_success length=====>>%d\n' % (len(increment_list_match_success)))
-    print('\n增量匹配成功的兄弟们 brother_in_table3_of_increment_list length=====>>%d\n' % (
-        len(brother_in_table3_of_increment_list)))
-    print('\n增量匹配失败的数据条数 increment_list_match_success length=====>>%d\n' % (len(increment_list_match_failed)))
-
-    sorted_list = sorted(increment_list_match_success, key=lambda x: x['group_id'], reverse=False)
-    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
-                                    p_new_file='./resources/receiving_address_increment_match_success.xls')
-
-    sorted_list = sorted(brother_in_table3_of_increment_list, key=lambda x: x['group_id'], reverse=False)
-    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
-                                    p_new_file='./resources/receiving_address_increment_brother_in_table3.xls')
-
-    sorted_list = sorted(increment_list_match_failed, key=lambda x: x['group_id'], reverse=False)
-    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
-                                    p_new_file='./resources/receiving_address_increment_match_failed.xls')
-    #
-    increment_list_match_success.extend(brother_in_table3_of_increment_list)
-    sorted_list = sorted(increment_list_match_success, key=lambda x: x['group_id'], reverse=False)
-    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
-                                    p_new_file='./resources/receiving_address_compare.xls')
-
-    # 8. 对去重后的数据进行处理并写入excel
-    if should_create_new_group_4_increment:
-        sorted_list = sorted(new_excel_list_grouped, key=lambda x: x['group_id'], reverse=False)
-        XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
-                                        p_new_file='./resources/receiving_address_group_by_2.xls')
-        sorted_list = sorted(new_excel_list_filtered, key=lambda x: x['group_id'], reverse=False)
-        XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
-                                        p_new_file='./resources/receiving_address_filtered_2.xls')
 
     end = datetime.datetime.now()
     print('\n\n----------------->增量耗时 cost time<-----------------')
     print(end - start)
+    start = datetime.datetime.now()
 
     print('\n程序执行完毕 !!! DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE')
     return 0

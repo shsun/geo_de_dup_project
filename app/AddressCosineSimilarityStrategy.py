@@ -30,18 +30,20 @@ class AddressCosineSimilarityStrategy(AbstractStringDiffStrategy):
         # s1 = p_address_dict_a['详细地址（拼接省市区）']
         # s2 = p_address_dict_b['详细地址（拼接省市区）']
 
+        # 详细地址（拼接省市区）匹配度
         P_KEY = '详细地址（拼接省市区）'
 
-        s1 = XUtils.remove_noise(p_address_dict_a, P_KEY)
-        s2 = XUtils.remove_noise(p_address_dict_b, P_KEY)
+        # 修改原始数据，丢弃掉空格，特殊字符串(物理丢弃)
+        p_address_dict_a[P_KEY] = XUtils.remove_noise_empty_punctuation(p_address_dict=p_address_dict_a, p_key=P_KEY)
+        p_address_dict_b[P_KEY] = XUtils.remove_noise_empty_punctuation(p_address_dict=p_address_dict_b, p_key=P_KEY)
+
+        # 丢弃省市县(内存中丢弃, 不篡改之前数据)
+        s1 = XUtils.remove_noise_province_city_district(p_address_dict=p_address_dict_a, p_key=P_KEY)
+        s2 = XUtils.remove_noise_province_city_district(p_address_dict=p_address_dict_b, p_key=P_KEY)
 
         # 例如有的地址叫国储八三二，有的地址叫国储832, 统一处理为国储832, 以提升匹配度
         s1 = XUtils.convert_chinese_numerals_2_arabic_numerals(p_str=s1)
         s2 = XUtils.convert_chinese_numerals_2_arabic_numerals(p_str=s2)
-
-        # 修改原始数据，丢弃掉空格，特殊字符串
-        p_address_dict_a[P_KEY] = XUtils.remove_empty_and_punctuation(p_address_dict=p_address_dict_a, p_key=P_KEY)
-        p_address_dict_b[P_KEY] = XUtils.remove_empty_and_punctuation(p_address_dict=p_address_dict_b, p_key=P_KEY)
 
         vec1, vec2 = self.get_word_vector(s1, s2)
         dist1 = self.cos_dist(vec1, vec2)

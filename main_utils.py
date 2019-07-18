@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import warnings, datetime, pprint, sys, os, os.path, xlrd, xlwt
+import warnings, datetime, pprint, sys, os, random, os.path, xlrd, xlwt
 
 from app.GEODistanceStrategy import GEODistanceStrategy
 from app.AddressStringDiffStrategy import AddressStringDiffStrategy
@@ -44,10 +44,12 @@ def contains(p_new_excel_list=None, p_old_dict=None):
 
         # Note 根据距离来判断(200米)
         match_distance, real_distance = GEODistanceStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
+        #real_distance = random.randint(0, 5000000)
 
         # Note 计算字符匹配度
         # 详细地址（拼接省市区）匹配度; 详细地址(PROD地址) 匹配度
         rst_str_diff, sim_string = AddressStringDiffStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
+        # sim_string = random.random()
 
         # Note 看这里 ................................... 加权系数, 可以调. 因为字符串匹配更优, 所以权重大一些, 此处需要人工去调
         FACTOR = 0.75
