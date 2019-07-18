@@ -9,8 +9,14 @@ from urllib import parse
 class XUtils(object):
     G_DIGIT_DICT = {'零': 0, '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9}
 
+
     @staticmethod
-    def convert_chinese_numerals_2_arabic_numerals(p_str=None):
+    def convert_chinese_numerals_2_arabic_numerals_for_dict(p_address_dict=None, p_key=None):
+        p_str = p_address_dict[p_key]
+        return XUtils.convert_chinese_numerals_2_arabic_numerals_4_str(p_str=p_str)
+
+    @staticmethod
+    def convert_chinese_numerals_2_arabic_numerals_4_str(p_str=None):
         """ 将汉字数字转换为阿拉伯数字
 
         :param p_str:
