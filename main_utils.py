@@ -55,6 +55,10 @@ def contains(p_new_excel_list=None, p_old_dict=None):
         # 计算根据距离算出来的相似度. 其中x是求大圆算出来的距离， 即2个点的真实距离
         x = real_distance
         b = (500 - x) / 500
+        # 现在算法有一个挺严重的问题就是sim=FACTER*a+（1-FACTER）*b这里，这里b有可能负的太厉害了，我建议在b那里做一个判定，b<-1的话，b直接就等于-1，或者改成-2之类的
+        # b还影响匹配度， 但是影响程度非常低
+        if b < -1:
+            b = -1
 
         # a是字符串相似度, b是距离相似度
         a = sim_string
