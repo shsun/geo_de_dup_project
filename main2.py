@@ -77,12 +77,12 @@ def main(p_args):
 
     #
     excel_title.insert(0, 'sim')
-    sorted_list = sorted(new_excel_list_grouped, key=lambda x: x['sim'], reverse=False)
+    sorted_list = sorted(new_excel_list_grouped, key=lambda x: x['sim'], reverse=True)
     XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
                                     p_new_file='./resources/table_4.xls')
 
-    top_10 = new_excel_list_grouped[:9]
-    sorted_list = sorted(top_10, key=lambda x: x['sim'], reverse=False)
+    top_10 = sorted_list[:9]
+    sorted_list = sorted(top_10, key=lambda x: x['sim'], reverse=True)
     XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
                                     p_new_file='./resources/table_5.xls')
     excel_title.remove('sim')
