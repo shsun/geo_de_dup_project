@@ -42,20 +42,13 @@ def main(p_args):
     XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=old_excel_list,
                                     p_new_file='./resources/receiving_address_input_1_ok.xls')
 
-    increment_dict = {}
-    while len(increment_dict) < G_INCREMENT_SIZE:
-        random_index = random.randint(0, len(old_excel_list) - 1)
-        increment_dict[random_index] = 'yes'
-
-    # 100条增量
+    # 增量
     increment_list = []
-    for (k, v) in increment_dict.items():
-        tmp = old_excel_list[k]
-        increment_list.append(tmp)
-    # 将增量数据删除
-    for tmp in increment_list:
-        old_excel_list.remove(tmp)
-    # 4386条存量(即表1)
+    while len(increment_list) < G_INCREMENT_SIZE:
+        random_index = random.randint(0, len(old_excel_list) - 1)
+        tmp_dict = old_excel_list.pop(random_index)
+        increment_list.append(tmp_dict)
+    # 存量(即表1)
     stock_list = old_excel_list
 
     print('存量 increment_list.length===>%d' % (len(increment_list)))
