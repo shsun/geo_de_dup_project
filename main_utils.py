@@ -70,7 +70,9 @@ def contains(p_new_excel_list=None, p_old_dict=None):
 
         # rst = match_distance is True and rst_str_diff is True
         # NOTE 看这里  ...................... 此处也需要人为调整
-        rst = sim >= 0.6
+        if rst is False:
+            # 一旦匹配到一个兄弟后， 就认为成功, 后续就无需再考虑rst了， 后续就是去找匹配度更高的兄弟即可
+            rst = sim >= 0.6
 
         tmp_new_dict['sim'] = sim
 
