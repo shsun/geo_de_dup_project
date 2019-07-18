@@ -53,7 +53,8 @@ def main(p_args):
     should_create_new_group_4_increment = False
     excel_title.insert(0, 'group_id')
     for tmp_dict in old_excel_list:
-        rst, brother_dict = contains(p_new_excel_list=new_excel_list_grouped, p_old_dict=tmp_dict)
+        rst, brother_dict, sim = contains(p_new_excel_list=new_excel_list_grouped, p_old_dict=tmp_dict)
+        tmp_dict['sim'] = sim
         if rst is False:
             tmp_dict['标准地址'] = '匹配失败'
 
@@ -73,6 +74,18 @@ def main(p_args):
             tmp_dict['group_id'] = brother_dict['group_id']
             increment_list_match_success.append(tmp_dict)
             pass
+
+    #
+    excel_title.insert(0, 'sim')
+    sorted_list = sorted(new_excel_list_grouped, key=lambda x: x['sim'], reverse=False)
+    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
+                                    p_new_file='./resources/table_4.xls')
+
+    top_10 = new_excel_list_grouped[:9]
+    sorted_list = sorted(top_10, key=lambda x: x['sim'], reverse=False)
+    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
+                                    p_new_file='./resources/table_5.xls')
+    excel_title.remove('sim')
 
     new_excel_list_filtered = []
     new_excel_dict_filtered = {}

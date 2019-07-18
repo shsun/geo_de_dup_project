@@ -12,14 +12,12 @@ os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.UTF8'
 """
 
 
-
 def main(p_args):
     global g_contains_execute_times
     global g_contains_cost_time
 
     g_contains_execute_times = 0
     g_contains_cost_time = 0
-
 
     start = datetime.datetime.now()
 
@@ -59,11 +57,11 @@ def main(p_args):
     for tmp_dict in old_excel_list:
 
         time_start = time.time()
-        rst, brother_dict = contains(p_new_excel_list=new_excel_list_grouped, p_old_dict=tmp_dict)
+        rst, brother_dict, sim = contains(p_new_excel_list=new_excel_list_grouped, p_old_dict=tmp_dict)
         time_end = time.time()
 
         g_contains_execute_times += 1
-        g_contains_cost_time += (time_end-time_start)
+        g_contains_cost_time += (time_end - time_start)
 
         if rst is False:
             group_id += 1
@@ -112,8 +110,7 @@ def main(p_args):
     print('\n\n----------------->g_contains_cost_time<-----------------')
     print(g_contains_execute_times)
     print(g_contains_cost_time)
-    print(g_contains_cost_time/g_contains_execute_times)
-
+    print(g_contains_cost_time / g_contains_execute_times)
 
     end = datetime.datetime.now()
     print('\n\n----------------->增量耗时 cost time<-----------------')

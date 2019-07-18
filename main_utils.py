@@ -34,6 +34,8 @@ def contains(p_new_excel_list=None, p_old_dict=None):
     """
     rst = False
     brother_dict = None
+    sim = 0
+    
     for tmp_new_dict in p_new_excel_list:
 
         # Note 利用余弦相似度公式计算两字符串的相似性 (相似度达到0.8则认为是一个地址，否则是2个不同地址, 这个0.8我是随便写的, 可修改)
@@ -73,4 +75,4 @@ def contains(p_new_excel_list=None, p_old_dict=None):
         if rst is True:
             brother_dict = tmp_new_dict
             break
-    return rst, brother_dict
+    return rst, brother_dict, sim
