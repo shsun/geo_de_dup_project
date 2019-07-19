@@ -75,7 +75,7 @@ def contains(p_new_excel_list=None, p_old_dict=None):
             # 计算根据距离算出来的相似度. 其中x是求大圆算出来的距离， 即2个点的真实距离
             b = (XConstants.FIXED_DISTANCE - x) / XConstants.FIXED_DISTANCE
             # b还影响匹配度， 但是影响程度非常低
-            B_MIN = (XConstants.BETA - a * XConstants.ALPHA) / (1 - XConstants.ALPHA)
+            B_MIN = (XConstants.BETA - XConstants.A_THEORY * XConstants.ALPHA) / (1 - XConstants.ALPHA)
             if b < B_MIN:
                 b = B_MIN
         else:

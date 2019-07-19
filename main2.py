@@ -77,28 +77,48 @@ def main(p_args):
             tmp_dict['group_id'] = brother_dict['group_id']
             increment_list_match_success.append(tmp_dict)
 
+        # 再加上一行判定标准, 这一行的sim值那里填上我们判定的beta(该系数可以调，初始值是0.6)
+        dummy_dict = {}
+        for tmp_title in excel_title:
+            dummy_dict[tmp_title] = '0'
+        dummy_dict['sim'] = XConstants.BETA
+
         # 表4
         # 生成表4
         # 表4就是标准地址库加上一列sim值
         # 再加上一行判定标准，这一行的sim值那里填上我们的判定值β0.6
         excel_title.insert(0, 'sim')
         sorted_list = sorted(new_excel_list_grouped, key=lambda x: x['sim'], reverse=True)
-        # 再加上一行判定标准, 这一行的sim值那里填上我们判定的beta(该系数可以调，初始值是0.6)
-        dummy_dict = {}
-        for tmp_title in excel_title:
-            dummy_dict[tmp_title] = '0'
-        dummy_dict['sim'] = XConstants.BETA
         sorted_list.insert(0, dummy_dict)
         XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
                                         p_new_file='./resources/table_%d_4.xls' % (i))
         # 表5
         # 对表4进行排序，sim值由大到小
-        # 然后输出前十个数据加上0.6判定标准那行的数据
+        # 然后输出前十个数据加上0.6判定标准那行的数据. 这时我们有几种情况
+        #
+        # 1.    前十名都大于0.6，这时输出结果就是前10名在前十行，第十一行就是判定标准0.6那一行
+        #
+        # 2.    识别成功，前十名都是合格的，人工自己选择）
+        #       前十名都小于0.6，这时输出结果就是第一行是判定标准0.6那一行，2到11行是前十名（这是就是认为匹配失败，前十名只能用做参考）
+        #
+        # 3.    前十名有一部分大于0.6，有一部分小于0.6，准确来说应该就9个地址吧，因为前十名包含了0.6，所以这时输出的就是大于0.6的是合格的，人工选择，小于0.6的不合格，只能参考
+        #
         sorted_list.remove(dummy_dict)
         top_10 = sorted_list[:9]
         sorted_list = sorted(top_10, key=lambda x: x['sim'], reverse=True)
+
+        # 我的意思是加一个Beta2 = 0.8，sim2 = (1 + sim) / 2
+
+
+
+        # 1. 前十名都大于XConstants.BETA2_RED_LINE，这时输出结果就是前10名在前十行，第十一行就是判定标准0.6那一行
+        # if sorted_list[-1] > XConstants.BETA:
+        #     sorted_list.append(dummy_dict)
+
+
         sorted_list.insert(0, dummy_dict)
         sorted_list.insert(0, tmp_dict)
+        
         XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
                                         p_new_file='./resources/table_%d_5.xls' % (i))
         excel_title.remove('sim')
