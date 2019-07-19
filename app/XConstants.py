@@ -11,13 +11,12 @@ class XConstants(object):
 
     # Note 看这里 ................................... ALPHA、BETA系数, 可以调. 因为字符串匹配更优, 所以权重大一些, 此处需要人工去调
     ALPHA = 0.75
+    #
     BETA = 0.6
 
     # 再计算b =（500 - X） / 500, Note 此处的500也作为一个参数，允许调整，见XConstants.FIXED_DISTANCE
     FIXED_DISTANCE = 500
 
     RGE = 0.6
-
-
 
     FOO_BAR = '......................................'

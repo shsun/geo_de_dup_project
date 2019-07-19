@@ -3,6 +3,7 @@
 import warnings, datetime, pprint, sys, os, os.path, xlrd, xlwt
 
 from app.XUtils import XUtils
+from app.XConstants import XConstants
 from main_utils import fetch_max_length_item, contains
 
 # sys.setdefaultencoding('utf8')
@@ -18,7 +19,7 @@ def main(p_args):
 
     excel_title = ['group_id', '序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度', '标准地址', '标准地址是否新地址']
 
-    # 存量表2，该表示由main1.py生成的
+    # 存量表2，该表示由main1.py生成的 (标准地址库)
     EXCEL_TABLE1 = './resources/receiving_address_group_by_1.xls'
     new_excel_dict_grouped = {}
     new_excel_list_grouped = XUtils.excel_to_list(p_read_excel_file_path=EXCEL_TABLE1,
@@ -75,19 +76,28 @@ def main(p_args):
             tmp_dict['标准地址'] = '匹配成功'
             tmp_dict['group_id'] = brother_dict['group_id']
             increment_list_match_success.append(tmp_dict)
-            pass
 
-        for tmp_new_dict in new_excel_list_grouped:
-            if 'sim' not in tmp_new_dict.keys():
-                aa = 1
-                pass
-
+        # 表4
+        # 生成表4
+        # 表4就是标准地址库加上一列sim值
+        # 再加上一行判定标准，这一行的sim值那里填上我们的判定值β0.6
         excel_title.insert(0, 'sim')
         sorted_list = sorted(new_excel_list_grouped, key=lambda x: x['sim'], reverse=True)
+        # 再加上一行判定标准, 这一行的sim值那里填上我们判定的beta(该系数可以调，初始值是0.6)
+        dummy_dict = {}
+        for tmp_title in excel_title:
+            dummy_dict[tmp_title] = '0'
+        dummy_dict['sim'] = XConstants.BETA
+        sorted_list.insert(0, dummy_dict)
         XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
                                         p_new_file='./resources/table_%d_4.xls' % (i))
+        # 表5
+        # 对表4进行排序，sim值由大到小
+        # 然后输出前十个数据加上0.6判定标准那行的数据
+        sorted_list.remove(dummy_dict)
         top_10 = sorted_list[:9]
         sorted_list = sorted(top_10, key=lambda x: x['sim'], reverse=True)
+        sorted_list.insert(0, dummy_dict)
         sorted_list.insert(0, tmp_dict)
         XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
                                         p_new_file='./resources/table_%d_5.xls' % (i))
