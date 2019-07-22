@@ -89,7 +89,6 @@ def main(p_args):
         # 再加上一行判定标准，这一行的sim值那里填上我们的判定值β0.6
         excel_title.insert(0, 'sim')
         sorted_list = sorted(new_excel_list_grouped, key=lambda x: x['sim'], reverse=True)
-        sorted_list.insert(0, dummy_dict)
         XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
                                         p_new_file='./resources/table_%d_4.xls' % (i))
         # 表5
@@ -103,22 +102,18 @@ def main(p_args):
         #
         # 3.    前十名有一部分大于0.6，有一部分小于0.6，准确来说应该就9个地址吧，因为前十名包含了0.6，所以这时输出的就是大于0.6的是合格的，人工选择，小于0.6的不合格，只能参考
         #
-        sorted_list.remove(dummy_dict)
         top_10 = sorted_list[:9]
         sorted_list = sorted(top_10, key=lambda x: x['sim'], reverse=True)
 
         # 我的意思是加一个Beta2 = 0.8，sim2 = (1 + sim) / 2
 
-
-
         # 1. 前十名都大于XConstants.BETA2_RED_LINE，这时输出结果就是前10名在前十行，第十一行就是判定标准0.6那一行
         # if sorted_list[-1] > XConstants.BETA:
         #     sorted_list.append(dummy_dict)
 
-
         sorted_list.insert(0, dummy_dict)
-        sorted_list.insert(0, tmp_dict)
-        
+        #sorted_list.insert(0, tmp_dict)
+
         XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=sorted_list,
                                         p_new_file='./resources/table_%d_5.xls' % (i))
         excel_title.remove('sim')
