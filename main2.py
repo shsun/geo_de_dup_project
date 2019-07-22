@@ -17,7 +17,8 @@ os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.UTF8'
 def main(p_args):
     start = datetime.datetime.now()
 
-    excel_title = ['group_id', '序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度', '标准地址', '标准地址是否新地址']
+    #excel_title = ['group_id', '序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度', '标准地址', '标准地址是否新地址']
+    excel_title = ['序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度', '标准地址', '标准地址是否新地址']
 
     # 存量表2，该表示由main1.py生成的 (标准地址库)
     EXCEL_TABLE1 = './resources/receiving_address_group_by_1.xls'
@@ -39,8 +40,9 @@ def main(p_args):
                                           p_excel_title_list=excel_title)
     group_id = len(old_excel_list)
 
+
     # 7. 读取增量excel(实际excel中就一条) 至 old_excel_list 中
-    excel_title.remove('group_id')
+    #excel_title.remove('group_id')
     # NOTE 看过来
     # EXCEL_TABLE_INCREMENT = './resources/receiving_address_increment_1.xlsx'
     EXCEL_TABLE_INCREMENT = './resources/receiving_address_increment_1_ok.xls'
@@ -52,7 +54,7 @@ def main(p_args):
     brother_in_table3_of_increment_list = []
     increment_list_match_failed = []
     should_create_new_group_4_increment = False
-    excel_title.insert(0, 'group_id')
+    #excel_title.insert(0, 'group_id')
     i = 0
     for tmp_dict in old_excel_list:
         i += 1
