@@ -51,10 +51,17 @@ def fetch_last_one_record_by_time(p_alter_time_start=None, p_alter_time_end=None
                     """
             cursor.execute(biz_sql)
             r = cursor.fetchone()
-            # FIXME 表中的字段需要挨个对一下， 需要取哪些字段出来?????
-            rst['locationId'] = r.get('location_id')
-            rst['provinceName'] = r.get('province_name')
-            success = True
+            if r is not None:
+                rst['DELIWAREHOUSE'] = r.get('DELIWAREHOUSE')
+                rst['ORITEMNUM'] = r.get('ORITEMNUM')
+                rst['CANSENDWEIGHT'] = r.get('CANSENDWEIGHT')
+                rst['CANSENDNUMBER'] = r.get('CANSENDNUMBER')
+                rst['ALTERTIME'] = r.get('ALTERTIME')
+                rst['WAINTFORDELNUMBER'] = r.get('WAINTFORDELNUMBER')
+                rst['WAINTFORDELWEIGHT'] = r.get('WAINTFORDELWEIGHT')
+                success = True
+            else:
+                success = False
         except Exception as e:
             print('exception %s' % (str(e)), file=sys.stderr)
             success = False
