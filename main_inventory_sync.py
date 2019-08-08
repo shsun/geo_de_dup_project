@@ -8,6 +8,8 @@ from app.XUtils import XUtils
 # FIXME 需要修改一下这些用户密码啥的
 G_DB_CONF = {'MYSQL_HOST': '47.99.118.183', 'MYSQL_USER': 'root', 'MYSQL_PASSWD': '', 'MYSQL_DB': 'db_sys', 'MYSQL_CHARSET': 'utf8mb4'}
 G_DB_CONF['MYSQL_DB'] = None
+if len(sys.argv) > 1:
+    G_DB_CONF['MYSQL_PASSWD'] = sys.argv[1]
 
 
 def fetch_last_one_record_by_time(p_alter_time_start: int = None, p_alter_time_end: int = None) -> (bool, list):
@@ -167,14 +169,10 @@ def main(p_args):
     XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=list,
                                     p_new_file='./resources/snapshot.xls')
 
-
-
     EXCEL_TABLE1 = './resources/snapshot.xls'
     old_excel_list = XUtils.excel_to_list(p_read_excel_file_path=EXCEL_TABLE1,
                                           p_sheet_name='Sheet1',
                                           p_excel_title_list=excel_title)
-
-
 
     # if success:
     #     update_inventory_table_by(p_new_value_dict=record)
