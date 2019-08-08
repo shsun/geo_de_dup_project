@@ -7,6 +7,7 @@ from app.XUtils import XUtils
 
 # FIXME 需要修改一下这些用户密码啥的
 G_DB_CONF = {'MYSQL_HOST': '47.99.118.183', 'MYSQL_USER': 'root', 'MYSQL_PASSWD': '', 'MYSQL_DB': 'db_sys', 'MYSQL_CHARSET': 'utf8mb4'}
+G_DB_CONF['MYSQL_DB'] = None
 
 
 def fetch_last_one_record_by_time(p_alter_time_start: int = None, p_alter_time_end: int = None) -> (bool, list):
@@ -33,49 +34,54 @@ def fetch_last_one_record_by_time(p_alter_time_start: int = None, p_alter_time_e
         start_time = time.time()
         biz_params = (p_alter_time_start, p_alter_time_end)
         try:
-            biz_sql = """
-                            SELECT  s.DELIWAREHOUSE as DELIWAREHOUSE,
-                            s.ORITEMNUM as ORITEMNUM,
-                             s.CANSENDWEIGHT as CANSENDWEIGHT,
-                            s.CANSENDNUMBER as CANSENDNUMBER,
-                             s.AlTERTIME as ALTERTIME,
-                             s.WAINTFORDELNUMBER as WAINTFORDELNUMBER,
-                             s.WAINTFORDELWEIGHT as WAINTFORDELWEIGHT
-                        FROM(SELECT *
-                        FROM db_inter.bclp_can_be_send_amount_copy1 s
-                        where ALTERTIME>%s and ALTERTIME<%s
-                        and STATUS not in ('D']
-                        order by ALTERTIME desc) as s
-                        GROUP BY s.ORITEMNUM, s.DELIWAREHOUSE
-                    """
             # FIXME 上面那个最原始的SQL报语法错误， 所以我删除了 and STATUS not in ('D']
             biz_sql = """
-                            SELECT  s.DELIWAREHOUSE as DELIWAREHOUSE,
-                            s.ORITEMNUM as ORITEMNUM,
-                             s.CANSENDWEIGHT as CANSENDWEIGHT,
-                            s.CANSENDNUMBER as CANSENDNUMBER,
-                             s.AlTERTIME as ALTERTIME,
-                             s.WAINTFORDELNUMBER as WAINTFORDELNUMBER,
-                             s.WAINTFORDELWEIGHT as WAINTFORDELWEIGHT
-                        FROM(SELECT *
-                        FROM db_inter.bclp_can_be_send_amount_copy1 s
-                        where ALTERTIME>%s and ALTERTIME<%s
-                        order by ALTERTIME desc) as s
-                        GROUP BY s.ORITEMNUM, s.DELIWAREHOUSE
+                        select * 
+                        from (
+                           select tab.*
+                           from (
+                           (select outbound_warehouse as outbound_warehouse,
+                               order_number as order_number,
+                               can_send_weight as can_send_weight,
+                               can_send_number as can_send_number,
+                               can_send_date as can_send_date,
+                               momentum_number as momentum_number,
+                               momentum_weight as momentum_weight,
+                               commodity as commodity
+                            from db_trans_plan.t_notice_stockinfo)
+                            union
+                           (SELECT s.DELIWAREHOUSE as outbound_warehouse,
+                               s.ORITEMNUM as order_number,
+                               s.CANSENDWEIGHT as can_send_weight,
+                               s.CANSENDNUMBER as can_send_number,
+                               s.AlTERTIME as can_send_date,
+                               s.WAINTFORDELNUMBER as momentum_number,
+                               s.WAINTFORDELWEIGHT as momentum_weight,
+                               s.COMMODITYNAME as commodity
+                            FROM(
+                              SELECT *
+                              FROM db_inter.bclp_can_be_send_amount_copy1 
+                              where ALTERTIME>%s and ALTERTIME<%s
+                              and STATUS not in ('D')) as s
+                           ) )as tab
+                           order by tab.can_send_date desc
+                        )  t
+                        group by t.outbound_warehouse,REPLACE(t.order_number,'-','')
                     """
             cursor.execute(biz_sql, biz_params)
             # r = cursor.fetchone()
             results = cursor.fetchall()
             if results is not None:
                 for r in results:
-                    tmp_record = {}
-                    tmp_record['DELIWAREHOUSE'] = r.get('DELIWAREHOUSE')
-                    tmp_record['ORITEMNUM'] = r.get('ORITEMNUM')
-                    tmp_record['CANSENDWEIGHT'] = r.get('CANSENDWEIGHT')
-                    tmp_record['CANSENDNUMBER'] = r.get('CANSENDNUMBER')
-                    tmp_record['ALTERTIME'] = r.get('ALTERTIME')
-                    tmp_record['WAINTFORDELNUMBER'] = r.get('WAINTFORDELNUMBER')
-                    tmp_record['WAINTFORDELWEIGHT'] = r.get('WAINTFORDELWEIGHT')
+                    tmp_record = dict()
+                    tmp_record['outbound_warehouse'] = r.get('outbound_warehouse')
+                    tmp_record['order_number'] = r.get('order_number')
+                    tmp_record['can_send_weight'] = r.get('can_send_weight')
+                    tmp_record['can_send_number'] = r.get('can_send_number')
+                    tmp_record['can_send_date'] = r.get('can_send_date')
+                    tmp_record['momentum_number'] = r.get('momentum_number')
+                    tmp_record['momentum_weight'] = r.get('momentum_weight')
+                    tmp_record['commodity'] = r.get('commodity')
                     rst.append(tmp_record)
                 success = True
             else:
@@ -157,8 +163,7 @@ def update_inventory_table_by(p_new_value_dict={}):
 
 def main(p_args):
     success, list = fetch_last_one_record_by_time(p_alter_time_start=20190702080000, p_alter_time_end=20190702150000)
-
-    excel_title = ['DELIWAREHOUSE', 'ORITEMNUM', 'CANSENDWEIGHT', 'CANSENDNUMBER', 'ALTERTIME', 'WAINTFORDELNUMBER', 'WAINTFORDELWEIGHT']
+    excel_title = ['outbound_warehouse', 'order_number', 'can_send_weight', 'can_send_number', 'can_send_date', 'momentum_number', 'momentum_weight', 'commodity']
     XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=list,
                                     p_new_file='./resources/snapshot.xls')
 
