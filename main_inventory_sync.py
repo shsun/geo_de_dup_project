@@ -3,13 +3,13 @@
 import pymysql.cursors
 import time
 import sys
-import random
+from app.XUtils import XUtils
 
 # FIXME 需要修改一下这些用户密码啥的
-G_DB_CONF = {'MYSQL_HOST': '47.99.118.183', 'MYSQL_USER': 'root', 'MYSQL_PASSWD': '密码不上传', 'MYSQL_DB': 'db_sys', 'MYSQL_CHARSET': 'utf8mb4'}
+G_DB_CONF = {'MYSQL_HOST': '47.99.118.183', 'MYSQL_USER': 'root', 'MYSQL_PASSWD': '', 'MYSQL_DB': 'db_sys', 'MYSQL_CHARSET': 'utf8mb4'}
 
 
-def fetch_last_one_record_by_time(p_alter_time_start=None, p_alter_time_end=None):
+def fetch_last_one_record_by_time(p_alter_time_start: int = None, p_alter_time_end: int = None) -> (bool, list):
     """
     小表选取最后一个记录
 
@@ -17,7 +17,7 @@ def fetch_last_one_record_by_time(p_alter_time_start=None, p_alter_time_end=None
     :return:
     """
     success = False
-    rst = {}
+    rst = []
     global G_DB_CONF
 
     try:
@@ -64,15 +64,19 @@ def fetch_last_one_record_by_time(p_alter_time_start=None, p_alter_time_end=None
                         GROUP BY s.ORITEMNUM, s.DELIWAREHOUSE
                     """
             cursor.execute(biz_sql, biz_params)
-            r = cursor.fetchone()
-            if r is not None:
-                rst['DELIWAREHOUSE'] = r.get('DELIWAREHOUSE')
-                rst['ORITEMNUM'] = r.get('ORITEMNUM')
-                rst['CANSENDWEIGHT'] = r.get('CANSENDWEIGHT')
-                rst['CANSENDNUMBER'] = r.get('CANSENDNUMBER')
-                rst['ALTERTIME'] = r.get('ALTERTIME')
-                rst['WAINTFORDELNUMBER'] = r.get('WAINTFORDELNUMBER')
-                rst['WAINTFORDELWEIGHT'] = r.get('WAINTFORDELWEIGHT')
+            # r = cursor.fetchone()
+            results = cursor.fetchall()
+            if results is not None:
+                for r in results:
+                    tmp_record = {}
+                    tmp_record['DELIWAREHOUSE'] = r.get('DELIWAREHOUSE')
+                    tmp_record['ORITEMNUM'] = r.get('ORITEMNUM')
+                    tmp_record['CANSENDWEIGHT'] = r.get('CANSENDWEIGHT')
+                    tmp_record['CANSENDNUMBER'] = r.get('CANSENDNUMBER')
+                    tmp_record['ALTERTIME'] = r.get('ALTERTIME')
+                    tmp_record['WAINTFORDELNUMBER'] = r.get('WAINTFORDELNUMBER')
+                    tmp_record['WAINTFORDELWEIGHT'] = r.get('WAINTFORDELWEIGHT')
+                    rst.append(tmp_record)
                 success = True
             else:
                 success = False
@@ -152,7 +156,12 @@ def update_inventory_table_by(p_new_value_dict={}):
 
 
 def main(p_args):
-    success, record = fetch_last_one_record_by_time(p_alter_time_start=20190702080000, p_alter_time_end=20190702150000)
+    success, list = fetch_last_one_record_by_time(p_alter_time_start=20190702080000, p_alter_time_end=20190702150000)
+
+    excel_title = ['DELIWAREHOUSE', 'ORITEMNUM', 'CANSENDWEIGHT', 'CANSENDNUMBER', 'ALTERTIME', 'WAINTFORDELNUMBER', 'WAINTFORDELWEIGHT']
+    XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=list,
+                                    p_new_file='./snapshot.xls')
+
     # if success:
     #     update_inventory_table_by(p_new_value_dict=record)
 
