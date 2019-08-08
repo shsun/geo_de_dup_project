@@ -31,7 +31,7 @@ def fetch_last_one_record_by_time(p_alter_time_start=None, p_alter_time_end=None
         cursor = conn.cursor()
         #
         start_time = time.time()
-
+        biz_params = (p_alter_time_start, p_alter_time_end)
         try:
             # NOTE 小表选取最后一个记录
             biz_sql = """
@@ -44,12 +44,12 @@ def fetch_last_one_record_by_time(p_alter_time_start=None, p_alter_time_end=None
                              s.WAINTFORDELWEIGHT as WAINTFORDELWEIGHT
                         FROM(SELECT *
                         FROM db_inter.bclp_can_be_send_amount_copy1 s
-                        where ALTERTIME>20190702080000 and ALTERTIME<20190702150000
+                        where ALTERTIME>%s and ALTERTIME<%s
                         and STATUS not in ('D']
                         order by ALTERTIME desc) as s
                         GROUP BY s.ORITEMNUM, s.DELIWAREHOUSE
                     """
-            cursor.execute(biz_sql)
+            cursor.execute(biz_sql, biz_params)
             r = cursor.fetchone()
             if r is not None:
                 rst['DELIWAREHOUSE'] = r.get('DELIWAREHOUSE')
@@ -92,22 +92,50 @@ def update_inventory_table_by(p_new_value_dict={}):
         conn.autocommit(1)
         cursor = conn.cursor()
         #
-        # FIXME  此处是真实的值， 来自小表的那4个值
-        update_params = ()
+        """
+        小表列的含义，
+        
+        DELIWAREHOUSE 仓库名，
+        ORITEMNUM 订单号（就是相当于刚刚的品种），
+        
+        CANSENDWEIGHT 可发重量，
+        CANSENDNUMBER 可发数量，
+        WAINTFORDELNUMBER 待发数量
+        WAINTFORDELWEIGHT 待发重量（相当于库存）
+        
+        这四个字段(可发两个待发两个)直接覆盖大表
+        
+        仓库名与订单号是要匹配的
+        """
+        # NOTE
+        biz_params = (p_new_value_dict['CANSENDWEIGHT'],
+                      p_new_value_dict['CANSENDNUMBER'],
+                      p_new_value_dict['WAINTFORDELNUMBER'],
+                      p_new_value_dict['WAINTFORDELWEIGHT'],
+                      p_new_value_dict['DELIWAREHOUSE'],
+                      p_new_value_dict['ORITEMNUM'])
 
-        update_sql = """
-                    update db_trans_plan set agent_this_month_retate_charge_money=%s, agent_history_rebate_money=%s,
-                    before_adjust_cash_cost=%s, after_adjust_cash_cost=%s, agent_this_month_rebate_money=%s, agent_this_month_rebate_ratio=%s,
-                    adjust_rebate_ratio=%s, this_month_remain_rebate_money=%s, add_time=%s where id = %s
+        biz_sql = """
+                    update 
+                    db_trans_plan 
+                    set 
+                    CANSENDWEIGHT=%s, 
+                    CANSENDNUMBER=%s,
+                    WAINTFORDELNUMBER=%s, 
+                    WAINTFORDELWEIGHT=%s 
+                    where 
+                    1=1 and
+                    DELIWAREHOUSE=%s and
+                    ORITEMNUM=%s
                     """
-        cursor.execute(update_sql, update_params)
+        cursor.execute(biz_sql, biz_params)
         cursor.close()
     except Exception as e:
         print('exception %s' % (str(e)), file=sys.stderr)
 
 
 def main(p_args):
-    success, record = fetch_last_one_record_by_time(p_alter_time_start=None, p_alter_time_end=None)
+    success, record = fetch_last_one_record_by_time(p_alter_time_start=20190702080000, p_alter_time_end=20190702150000)
     if success:
         update_inventory_table_by(p_new_value_dict=record)
 
