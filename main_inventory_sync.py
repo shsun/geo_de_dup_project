@@ -167,6 +167,15 @@ def main(p_args):
     XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=list,
                                     p_new_file='./resources/snapshot.xls')
 
+
+
+    EXCEL_TABLE1 = './resources/snapshot.xls'
+    old_excel_list = XUtils.excel_to_list(p_read_excel_file_path=EXCEL_TABLE1,
+                                          p_sheet_name='Sheet1',
+                                          p_excel_title_list=excel_title)
+
+
+
     # if success:
     #     update_inventory_table_by(p_new_value_dict=record)
 
