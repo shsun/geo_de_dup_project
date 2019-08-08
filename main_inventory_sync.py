@@ -6,7 +6,7 @@ import sys
 import random
 
 # FIXME 需要修改一下这些用户密码啥的
-G_DB_CONF = {'MYSQL_HOST': '127.0.0.1', 'MYSQL_USER': 'root', 'MYSQL_PASSWD': '123456', 'MYSQL_DB': 'db_name??????????', 'MYSQL_CHARSET': 'utf8mb4'}
+G_DB_CONF = {'MYSQL_HOST': '47.99.118.183', 'MYSQL_USER': 'root', 'MYSQL_PASSWD': '密码不上传', 'MYSQL_DB': 'db_sys', 'MYSQL_CHARSET': 'utf8mb4'}
 
 
 def fetch_last_one_record_by_time(p_alter_time_start=None, p_alter_time_end=None):
@@ -33,7 +33,6 @@ def fetch_last_one_record_by_time(p_alter_time_start=None, p_alter_time_end=None
         start_time = time.time()
         biz_params = (p_alter_time_start, p_alter_time_end)
         try:
-            # NOTE 小表选取最后一个记录
             biz_sql = """
                             SELECT  s.DELIWAREHOUSE as DELIWAREHOUSE,
                             s.ORITEMNUM as ORITEMNUM,
@@ -46,6 +45,21 @@ def fetch_last_one_record_by_time(p_alter_time_start=None, p_alter_time_end=None
                         FROM db_inter.bclp_can_be_send_amount_copy1 s
                         where ALTERTIME>%s and ALTERTIME<%s
                         and STATUS not in ('D']
+                        order by ALTERTIME desc) as s
+                        GROUP BY s.ORITEMNUM, s.DELIWAREHOUSE
+                    """
+            # FIXME 上面那个最原始的SQL报语法错误， 所以我删除了 and STATUS not in ('D']
+            biz_sql = """
+                            SELECT  s.DELIWAREHOUSE as DELIWAREHOUSE,
+                            s.ORITEMNUM as ORITEMNUM,
+                             s.CANSENDWEIGHT as CANSENDWEIGHT,
+                            s.CANSENDNUMBER as CANSENDNUMBER,
+                             s.AlTERTIME as ALTERTIME,
+                             s.WAINTFORDELNUMBER as WAINTFORDELNUMBER,
+                             s.WAINTFORDELWEIGHT as WAINTFORDELWEIGHT
+                        FROM(SELECT *
+                        FROM db_inter.bclp_can_be_send_amount_copy1 s
+                        where ALTERTIME>%s and ALTERTIME<%s
                         order by ALTERTIME desc) as s
                         GROUP BY s.ORITEMNUM, s.DELIWAREHOUSE
                     """
@@ -107,13 +121,16 @@ def update_inventory_table_by(p_new_value_dict={}):
         
         仓库名与订单号是要匹配的
         """
+
+        # 大表的订单号没有中间的-，小表的ORITEMNUM订单号有一个-
+        new_oritemnum = (p_new_value_dict['ORITEMNUM']).replace('-', '')
         # NOTE
         biz_params = (p_new_value_dict['CANSENDWEIGHT'],
                       p_new_value_dict['CANSENDNUMBER'],
                       p_new_value_dict['WAINTFORDELNUMBER'],
                       p_new_value_dict['WAINTFORDELWEIGHT'],
                       p_new_value_dict['DELIWAREHOUSE'],
-                      p_new_value_dict['ORITEMNUM'])
+                      new_oritemnum)
 
         biz_sql = """
                     update 
@@ -128,7 +145,7 @@ def update_inventory_table_by(p_new_value_dict={}):
                     DELIWAREHOUSE=%s and
                     ORITEMNUM=%s
                     """
-        cursor.execute(biz_sql, biz_params)
+        # cursor.execute(biz_sql, biz_params)
         cursor.close()
     except Exception as e:
         print('exception %s' % (str(e)), file=sys.stderr)
