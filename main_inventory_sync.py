@@ -153,8 +153,8 @@ def update_inventory_table_by(p_new_value_dict={}):
 
 def main(p_args):
     success, record = fetch_last_one_record_by_time(p_alter_time_start=20190702080000, p_alter_time_end=20190702150000)
-    if success:
-        update_inventory_table_by(p_new_value_dict=record)
+    # if success:
+    #     update_inventory_table_by(p_new_value_dict=record)
 
     return 0
 
