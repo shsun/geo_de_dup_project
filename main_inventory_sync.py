@@ -5,9 +5,9 @@ import time
 import sys
 from app.XUtils import XUtils
 
-# FIXME 需要修改一下这些用户密码啥的
 G_DB_CONF = {'MYSQL_HOST': '47.99.118.183', 'MYSQL_USER': 'root', 'MYSQL_PASSWD': '', 'MYSQL_DB': 'db_sys', 'MYSQL_CHARSET': 'utf8mb4'}
 G_DB_CONF['MYSQL_DB'] = None
+# NOTE 数据库密码通过命令行参数传递过来， 以免泄露密码
 if len(sys.argv) > 1:
     G_DB_CONF['MYSQL_PASSWD'] = sys.argv[1]
 
