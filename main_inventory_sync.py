@@ -160,7 +160,7 @@ def main(p_args):
 
     excel_title = ['DELIWAREHOUSE', 'ORITEMNUM', 'CANSENDWEIGHT', 'CANSENDNUMBER', 'ALTERTIME', 'WAINTFORDELNUMBER', 'WAINTFORDELWEIGHT']
     XUtils.process_and_dump_2_excel(p_excel_title=excel_title, p_new_excel_list=list,
-                                    p_new_file='./snapshot.xls')
+                                    p_new_file='./resources/snapshot.xls')
 
     # if success:
     #     update_inventory_table_by(p_new_value_dict=record)
