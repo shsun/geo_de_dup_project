@@ -13,7 +13,7 @@ class XUPDescriptor(object):
 
     # 过去一个月某流向上的某产品的均价
     # select average(unit_price) from table where 1 = 1 and route = 1 and goods_category_id = 1
-    historical_unit_price_of_last_month = -1
+    historical_avg_unit_price_of_last_month = -1
     # origin Unit Price被我限制了一下上下限问题，不让它超过一个上下限
     min_unit_price_of_last_month = -1
     max_unit_price_of_last_month = -1
@@ -42,9 +42,9 @@ class XUPDescriptor(object):
         :param p_date:
         """
         #
-        self.historical_unit_price_of_last_month = -1
-        self.min_unit_price_of_last_month = self.historical_unit_price_of_last_month * 1.00
-        self.max_unit_price_of_last_month = self.historical_unit_price_of_last_month * 1.25
+        self.historical_avg_unit_price_of_last_month = -1
+        self.min_unit_price_of_last_month = self.historical_avg_unit_price_of_last_month * 1.00
+        self.max_unit_price_of_last_month = self.historical_avg_unit_price_of_last_month * 1.25
         #
         self.originUPCalculateStrategy = XOriginalUPDefaultCalculateStrategy()
         self.theoryUPDefaultCalculateStrategy = XTheoryUPDefaultCalculateStrategy()

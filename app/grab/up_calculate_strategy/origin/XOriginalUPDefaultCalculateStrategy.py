@@ -14,13 +14,18 @@ class XOriginalUPDefaultCalculateStrategy(XOriginUPAbstractCalculateStrategy):
     我期望是在第2次也就是加价6%时成交, 这样我初始单价就设置成理论成交价减去历史价的6%
     tmp = max( (theory_unit_price + historical_avg_unit_price_of_last_month)/2, theory_unit_price - historical_avg_unit_price_of_last_month * 0.06)
     origin_unit_price = min( tmp, historical_avg_unit_price_of_last_month * 1.10)
+
+
+    expected_price 心理最高单价
+    execution_price <= expected_price
+
     """
     #
     theoryUPDefaultCalculateStrategy = None
     #
     historical_avg_unit_price_of_last_month = -1
 
-    def __init__(self, p_historical_avg_unit_price_of_last_month=None, p_theory_unit_price=None):
+    def __init__(self, p_historical_avg_unit_price_of_last_month=None, p_theoryUPDefaultCalculateStrategy=None):
         """
 
         :param p_line:
@@ -29,7 +34,7 @@ class XOriginalUPDefaultCalculateStrategy(XOriginUPAbstractCalculateStrategy):
         super(XOriginUPAbstractCalculateStrategy, self).__init__()
 
         self.historical_avg_unit_price_of_last_month = p_historical_avg_unit_price_of_last_month
-        self.theoryUPDefaultCalculateStrategy = XTheoryUPAbstractCalculateStrategy()
+        self.theoryUPDefaultCalculateStrategy = XTheoryUPAbstractCalculateStrategy() if p_theoryUPDefaultCalculateStrategy == None else p_theoryUPDefaultCalculateStrategy
 
     def calculate(self):
         """
