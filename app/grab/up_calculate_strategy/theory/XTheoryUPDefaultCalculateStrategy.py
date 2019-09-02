@@ -1,7 +1,5 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-
-
 from app.grab.up_calculate_strategy.theory.XTheoryUPAbstractCalculateStrategy import XTheoryUPAbstractCalculateStrategy
 
 
