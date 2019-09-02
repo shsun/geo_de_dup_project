@@ -7,6 +7,9 @@ from app.grab.up_calculate_strategy.theory.XTheoryUPAbstractCalculateStrategy im
 
 class XTheoryUPDefaultCalculateStrategy(XTheoryUPAbstractCalculateStrategy):
     """
+    expected_price 心理最高单价
+
+    execution_price <= expected_price
 
     """
     order = -1

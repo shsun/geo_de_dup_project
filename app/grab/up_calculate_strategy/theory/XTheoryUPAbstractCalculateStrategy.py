@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 class XTheoryUPAbstractCalculateStrategy(object):
+
     order = -1
 
     def __init__(self, p_line=None, p_date=None):
