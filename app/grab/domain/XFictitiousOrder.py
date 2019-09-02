@@ -1,7 +1,12 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-class XOrder(object):
+class XFictitiousOrder(object):
+    """
+    虚拟车辆订单信息表（需要被抢的单子）
+    需要按订单仓库形式提供，省市区，目的地，取货仓库，大品种，小品种，重量，类似于智能分货的输出，（取货地个数，卸货地个数）
+    """
+
     order = -1
     address_no = -1
     # 省,市,区/县,乡镇
