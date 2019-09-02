@@ -7,6 +7,10 @@ from app.grab.up_calculate_strategy.theory.XTheoryUPDefaultCalculateStrategy imp
 
 
 class XUPDescriptor(object):
+    """
+
+    """
+
     # 过去一个月某流向上的某产品的均价
     # select average(unit_price) from table where 1 = 1 and route = 1 and goods_category_id = 1
     historical_unit_price_of_last_month = -1
@@ -14,7 +18,8 @@ class XUPDescriptor(object):
     min_unit_price_of_last_month = -1
     max_unit_price_of_last_month = -1
 
-    # 合理单价(理论单价是我心理能接受的最高成交价格), 就是我这次抢单过程中我理论上应该再这个价格停止。 暂时认为是一个固定数字100，后续有具体的算法求该值 = 100
+    # expected price
+    # 心理最高单价(理论单价是我心理能接受的最高成交价格), 就是我这次抢单过程中我理论上应该再这个价格停止。 暂时认为是一个固定数字100，后续有具体的算法求该值 = 100
     # Origin Total Price <= Theory Unit Price 这个关系
     theoryUPDefaultCalculateStrategy = None
 
@@ -23,7 +28,12 @@ class XUPDescriptor(object):
     # 所以我现在要定一个稍微低一点的价格, 这样有可能我会以更低的价格出手
     # 然后我每次加价是历史单价的百分之3
     # 我期望是在第2次也就是加价6%时成交, 这样我初始单价就设置成理论成交价减去历史价的6%
+
+    # 然后没四分钟提高一点点， 每次增加历史单价的2%， 理论单价，就是我这次抢单过程中我理论上应该再这个价格停止
     originUPCalculateStrategy = None
+
+    # 最高加价5次， 最大就允许提价5次， 6个价格
+
 
     def __init__(self, p_line=None, p_date=None):
         """
